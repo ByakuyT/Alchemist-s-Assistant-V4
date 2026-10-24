@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using PotionCraft.ObjectBased.RecipeMap.RecipeMapItem.PotionEffectMapItem;
+using PotionCraft.ObjectBased.RecipeMap.RecipeMapItem.VortexMapItem;
 using UnityEngine;
 
 namespace System.Runtime.CompilerServices
@@ -12,7 +15,54 @@ namespace AlchAssV4
 {
     public static class Variable
     {
+        #region 只读数据
+
+        public static readonly Dictionary<string, int> MapId = new() { { "Water", 0 }, { "Oil", 1 }, { "Wine", 2 } };
+
+        #endregion
+
+        #region 功能开关
+
+        public static bool DoPathCurve = false;
+
+        // 0 - 路径切向线; 1 - 加水方向线; 2 - 效果径向线; 3 - 漩涡径向线; 4 - 漩涡切向线
+        public static bool[] DoLines = [false, false, false, false, false];
+
+        #endregion
+
+        #region 状态数据
+
+        public static int HandoffRunning = -1;
+        public static Vector3 Offset;
+
+        public static PotionEffectMapItem TargetEffect;
+
+        // 0 - 水; 1 - 油
+        public static int[] VortexIndex = [-1, -1];
+
+        // 0 - 效果； 1 - 漩涡
+        public static Vector2?[] HandoffPositions = [null, null];
+
+        // 0 - 路径和效果; 1 - 路径和漩涡; 2 - 加水和效果; 3 - 加水和漩涡
+        public static List<Vector2>[] IntersectionPositions = [[], [], [], []];
+
+        public static List<(Vector3, bool)> PathPhysical = [];
+
+        // 0 - 水; 1 - 油
+        public static List<Vortex>[] Vortexs = [[], []];
+
+        #endregion
+
         #region 数据结构
+
+        /// <summary>
+        /// 漩涡
+        /// </summary>
+        public struct Vortex
+        {
+            public Vector3 Pos;
+            public double Rad;
+        }
 
         /// <summary>
         /// double向量

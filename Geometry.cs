@@ -23,7 +23,7 @@ namespace AlchAssV4
             var b = 2.0 * f.Dot(d);
             var c = f.SqrMagnitude - rad * rad;
             var delta = b * b - 4.0 * a * c;
-            if (delta <= 0) return;
+            if (delta < 0) return;
             var sqrtD = Math.Sqrt(delta);
             double[] ts = [(-b - sqrtD) / (2.0 * a), (-b + sqrtD) / (2.0 * a)];
             foreach (var t in ts)

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BepInEx;
+using PotionCraft.ManagersSystem;
 using UnityEngine;
 
 namespace AlchAssV4
@@ -62,10 +64,11 @@ namespace AlchAssV4
                         else
                         {
                             var delta = br * br - ar * cr;
-                            if (delta <= 0.0) continue;
+                            if (delta < 0.0) continue;
                             t = (-br - Math.Sqrt(delta)) / ar;
                             if (t is < 0.0 or > 1.0) continue;
-                            if (Math.Abs(pr + kr * t) > 1e-10) continue;
+                            var hs = Math.Abs(pr) + Math.Abs(kr * t);
+                            if (Math.Abs(pr + kr * t) > 1e-10 * hs) continue;
                         }
 
                         var cu2 = (t * Math.Sqrt(ar), i, ri);
@@ -98,6 +101,27 @@ namespace AlchAssV4
         public static void StartPathToLadle()
         {
             ClearHandoff();
+            if (!Variable.DoPathCurve || !Variable.DoLines[1]) return;
+            var doEffect = Variable.TargetEffect != null && Variable.IntersectionPositions[0].Count == 0;
+            var mapId = Variable.MapId[Managers.RecipeMap.currentMap.potionBase.name];
+            var vortexId = mapId < 2 ? Variable.VortexIndex[mapId] : -1;
+            var doVortex = vortexId >= 0 && Variable.IntersectionPositions[1].Count == 0;
+            var effectPos = doEffect ? Variable.TargetEffect.transform.localPosition : default;
+            var selVortex = doVortex ? Variable.Vortexs[mapId][vortexId] : default;
+            var path = new List<(Vector3, bool)>(Variable.PathPhysical);
+            var offset = Variable.Offset;
+            ThreadingHelper.Instance.StartAsyncInvoke(() =>
+            {
+                var effectHandoff = doEffect ? PathToLadle(path, offset, effectPos, 1.53) : null;
+                var vortexHandoff = doVortex ? PathToLadle(path, offset, selVortex.Pos, selVortex.Rad) : null;
+                return () =>
+                {
+                    if (effectHandoff.HasValue)
+                        Variable.HandoffPositions[0] = effectHandoff.Value;
+                    if (vortexHandoff.HasValue)
+                        Variable.HandoffPositions[1] = vortexHandoff.Value;
+                };
+            });
         }
 
         /// <summary>
@@ -126,6 +150,8 @@ namespace AlchAssV4
         /// </summary>
         public static void ClearHandoff()
         {
+            Variable.HandoffRunning = -1;
+            Variable.HandoffPositions = [null, null];
         }
 
         #endregion
