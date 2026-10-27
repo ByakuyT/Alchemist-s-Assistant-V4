@@ -1,6 +1,5 @@
-﻿namespace AlchAssV4
+﻿namespace AlchAssV4;
+
+public static class Calculation
 {
-    public class Calculation
-    {
-    }
 }
