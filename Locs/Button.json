@@ -1,0 +1,578 @@
+[
+  {
+    "key": "渲染选项",
+    "values": {
+      "en": "Rendering Options",
+      "de": "Renderoptionen",
+      "fr": "Options de rendu",
+      "it": "Opzioni di rendering",
+      "es": "Opciones de renderizado",
+      "ptBR": "Opções de renderização",
+      "ru": "Параметры отрисовки",
+      "pl": "Opcje renderowania",
+      "tr": "İşleme Seçenekleri",
+      "ja": "描画オプション",
+      "ko": "렌더링 옵션",
+      "th": "ตัวเลือกการเรนเดอร์",
+      "cs": "Možnosti vykreslování"
+    }
+  },
+  {
+    "key": "显示选项",
+    "values": {
+      "en": "Display Options",
+      "de": "Anzeigeoptionen",
+      "fr": "Options d'affichage",
+      "it": "Opzioni di visualizzazione",
+      "es": "Opciones de visualización",
+      "ptBR": "Opções de exibição",
+      "ru": "Параметры отображения",
+      "pl": "Opcje wyświetlania",
+      "tr": "Görüntüleme Seçenekleri",
+      "ja": "表示オプション",
+      "ko": "표시 옵션",
+      "th": "ตัวเลือกการแสดงผล",
+      "cs": "Možnosti zobrazení"
+    }
+  },
+  {
+    "key": "窗口管理",
+    "values": {
+      "en": "Window Management",
+      "de": "Fensterverwaltung",
+      "fr": "Gestion des fenêtres",
+      "it": "Gestione finestre",
+      "es": "Gestión de ventanas",
+      "ptBR": "Gerenciamento de janelas",
+      "ru": "Управление окнами",
+      "pl": "Zarządzanie oknami",
+      "tr": "Pencere Yönetimi",
+      "ja": "ウィンドウ管理",
+      "ko": "창 관리",
+      "th": "การจัดการหน้าต่าง",
+      "cs": "Správa oken"
+    }
+  },
+  {
+    "key": "自定义方向线管理",
+    "values": {
+      "en": "Custom Lines Management",
+      "de": "Verwaltung benutzerdefinierter Linien",
+      "fr": "Gestion des lignes personnalisées",
+      "it": "Gestione linee personalizzate",
+      "es": "Gestión de líneas personalizadas",
+      "ptBR": "Gerenciamento de linhas personalizadas",
+      "ru": "Управление пользовательскими линиями",
+      "pl": "Zarządzanie liniami niestandardowymi",
+      "tr": "Özel Çizgi Yönetimi",
+      "ja": "カスタムライン管理",
+      "ko": "사용자 지정 선 관리",
+      "th": "การจัดการเส้นที่กำหนดเอง",
+      "cs": "Správa vlastních čar"
+    }
+  },
+  {
+    "key": "自定义标记点管理",
+    "values": {
+      "en": "Custom Markers Management",
+      "de": "Verwaltung benutzerdefinierter Markierungen",
+      "fr": "Gestion des marqueurs personnalisés",
+      "it": "Gestione marcatori personalizzati",
+      "es": "Gestión de marcadores personalizados",
+      "ptBR": "Gerenciamento de marcadores personalizados",
+      "ru": "Управление пользовательскими маркерами",
+      "pl": "Zarządzanie znacznikami niestandardowymi",
+      "tr": "Özel İşaret Yönetimi",
+      "ja": "カスタムマーカー管理",
+      "ko": "사용자 지정 마커 관리",
+      "th": "การจัดการเครื่องหมายที่กำหนดเอง",
+      "cs": "Správa vlastních značek"
+    }
+  },
+  {
+    "key": "路径切向线",
+    "values": {
+      "en": "Path Line",
+      "de": "Pfadlinie",
+      "fr": "Ligne du chemin",
+      "it": "Linea del percorso",
+      "es": "Línea del camino",
+      "ptBR": "Linha do caminho",
+      "ru": "Линия пути",
+      "pl": "Linia ścieżki",
+      "tr": "Yol Çizgisi",
+      "ja": "経路ライン",
+      "ko": "경로 선",
+      "th": "เส้นเส้นทาง",
+      "cs": "Čára cesty"
+    }
+  },
+  {
+    "key": "加水方向线",
+    "values": {
+      "en": "Ladle Line",
+      "de": "Kellenlinie",
+      "fr": "Ligne de la louche",
+      "it": "Linea del mestolo",
+      "es": "Línea del cucharón",
+      "ptBR": "Linha da concha",
+      "ru": "Линия черпака",
+      "pl": "Linia chochli",
+      "tr": "Kepçe Çizgisi",
+      "ja": "お玉ライン",
+      "ko": "국자 선",
+      "th": "เส้นทัพพี",
+      "cs": "Čára naběračky"
+    }
+  },
+  {
+    "key": "效果径向线",
+    "values": {
+      "en": "Effect Line",
+      "de": "Effektlinie",
+      "fr": "Ligne de l'effet",
+      "it": "Linea dell'effetto",
+      "es": "Línea del efecto",
+      "ptBR": "Linha do efeito",
+      "ru": "Линия эффекта",
+      "pl": "Linia efektu",
+      "tr": "Etki Çizgisi",
+      "ja": "効果ライン",
+      "ko": "효과 선",
+      "th": "เส้นเอฟเฟกต์",
+      "cs": "Čára efektu"
+    }
+  },
+  {
+    "key": "漩涡径向线",
+    "values": {
+      "en": "Vortex Line",
+      "de": "Wirbellinie",
+      "fr": "Ligne de vortex",
+      "it": "Linea del vortice",
+      "es": "Línea del vórtice",
+      "ptBR": "Linha do vórtice",
+      "ru": "Линия вихря",
+      "pl": "Linia wiru",
+      "tr": "Girdap Çizgisi",
+      "ja": "渦ライン",
+      "ko": "소용돌이 선",
+      "th": "เส้นน้ำวน",
+      "cs": "Čára víru"
+    }
+  },
+  {
+    "key": "漩涡切向线",
+    "values": {
+      "en": "Vortex Tangent",
+      "de": "Wirbeltangente",
+      "fr": "Tangente du vortex",
+      "it": "Tangente del vortice",
+      "es": "Tangente del vórtice",
+      "ptBR": "Tangente do vórtice",
+      "ru": "Касательная вихря",
+      "pl": "Styczna wiru",
+      "tr": "Girdap Teğeti",
+      "ja": "渦の接線",
+      "ko": "소용돌이 접선",
+      "th": "เส้นสัมผัสน้ำวน",
+      "cs": "Tečna víru"
+    }
+  },
+  {
+    "key": "自定义方向线",
+    "values": {
+      "en": "Custom Line",
+      "de": "Benutzerdefinierte Linie",
+      "fr": "Ligne personnalisée",
+      "it": "Linea personalizzata",
+      "es": "Línea personalizada",
+      "ptBR": "Linha personalizada",
+      "ru": "Пользовательская линия",
+      "pl": "Linia niestandardowa",
+      "tr": "Özel Çizgi",
+      "ja": "カスタムライン",
+      "ko": "사용자 지정 선",
+      "th": "เส้นที่กำหนดเอง",
+      "cs": "Vlastní čára"
+    }
+  },
+  {
+    "key": "自定义标记点",
+    "values": {
+      "en": "Custom Marker",
+      "de": "Benutzerdefinierte Markierung",
+      "fr": "Marqueur personnalisé",
+      "it": "Marciatore personalizzato",
+      "es": "Marcador personalizado",
+      "ptBR": "Marcador personalizado",
+      "ru": "Пользовательский маркер",
+      "pl": "Znacznik niestandardowy",
+      "tr": "Özel İşaret",
+      "ja": "カスタムマーカー",
+      "ko": "사용자 지정 마커",
+      "th": "เครื่องหมายที่กำหนดเอง",
+      "cs": "Vlastní značka"
+    }
+  },
+  {
+    "key": "路径曲线",
+    "values": {
+      "en": "Path Curve",
+      "de": "Pfadkurve",
+      "fr": "Courbe du chemin",
+      "it": "Curva del percorso",
+      "es": "Curva del camino",
+      "ptBR": "Curva do caminho",
+      "ru": "Кривая пути",
+      "pl": "Krzywa ścieżki",
+      "tr": "Yol Eğrisi",
+      "ja": "経路カーブ",
+      "ko": "경로 곡선",
+      "th": "เส้นโค้งเส้นทาง",
+      "cs": "Křivka cesty"
+    }
+  },
+  {
+    "key": "漩涡曲线",
+    "values": {
+      "en": "Vortex Curve",
+      "de": "Wirbelkurve",
+      "fr": "Courbe du vortex",
+      "it": "Curva del vortice",
+      "es": "Curva del vórtice",
+      "ptBR": "Curva do vórtice",
+      "ru": "Кривая вихря",
+      "pl": "Krzywa wiru",
+      "tr": "Girdap Eğrisi",
+      "ja": "渦カーブ",
+      "ko": "소용돌이 곡선",
+      "th": "เส้นโค้งน้ำวน",
+      "cs": "Křivka víru"
+    }
+  },
+  {
+    "key": "效果范围",
+    "values": {
+      "en": "Effect Range",
+      "de": "Effektbereich",
+      "fr": "Portée de l'effet",
+      "it": "Portata dell'effetto",
+      "es": "Alcance del efecto",
+      "ptBR": "Alcance do efeito",
+      "ru": "Дальность эффекта",
+      "pl": "Zasięg efektu",
+      "tr": "Etki Menzili",
+      "ja": "効果範囲",
+      "ko": "효과 범위",
+      "th": "ระยะเอฟเฟกต์",
+      "cs": "Dosah efektu"
+    }
+  },
+  {
+    "key": "漩涡范围",
+    "values": {
+      "en": "Vortex Range",
+      "de": "Wirbelbereich",
+      "fr": "Portée du vortex",
+      "it": "Portata del vortice",
+      "es": "Alcance del vórtice",
+      "ptBR": "Alcance do vórtice",
+      "ru": "Дальность вихря",
+      "pl": "Zasięg wiru",
+      "tr": "Girdap Menzili",
+      "ja": "渦範囲",
+      "ko": "소용돌이 범위",
+      "th": "ระยะน้ำวน",
+      "cs": "Dosah víru"
+    }
+  },
+  {
+    "key": "骷髅区模拟",
+    "values": {
+      "en": "Danger Simulation",
+      "de": "Gefahrensimulation",
+      "fr": "Simulation de danger",
+      "it": "Simulazione del pericolo",
+      "es": "Simulación de peligro",
+      "ptBR": "Simulação de perigo",
+      "ru": "Симуляция опасности",
+      "pl": "Symulacja zagrożenia",
+      "tr": "Tehlike Simülasyonu",
+      "ja": "危険ゾーンシミュレーション",
+      "ko": "위험 구역 시뮬레이션",
+      "th": "จำลองโซนอันตราย",
+      "cs": "Simulace nebezpečí"
+    }
+  },
+  {
+    "key": "沼泽区模拟",
+    "values": {
+      "en": "Swamp Simulation",
+      "de": "Sumpfsimulation",
+      "fr": "Simulation du marais",
+      "it": "Simulazione della palude",
+      "es": "Simulación del pantano",
+      "ptBR": "Simulação do pântano",
+      "ru": "Симуляция болота",
+      "pl": "Symulacja bagna",
+      "tr": "Bataklık Simülasyonu",
+      "ja": "沼地シミュレーション",
+      "ko": "늪 시뮬레이션",
+      "th": "จำลองหนองน้ำ",
+      "cs": "Simulace bažiny"
+    }
+  },
+  {
+    "key": "透明瓶身",
+    "values": {
+      "en": "Transparency",
+      "de": "Transparenz",
+      "fr": "Transparence",
+      "it": "Trasparenza",
+      "es": "Transparencia",
+      "ptBR": "Transparência",
+      "ru": "Прозрачность",
+      "pl": "Przezroczystość",
+      "tr": "Şeffaflık",
+      "ja": "透明化",
+      "ko": "투명화",
+      "th": "ความโปร่งใส",
+      "cs": "Průhlednost"
+    }
+  },
+  {
+    "key": "盐量数据",
+    "values": {
+      "en": "Salt Data",
+      "de": "Salzdaten",
+      "fr": "Données de sel",
+      "it": "Dati del sale",
+      "es": "Datos de sal",
+      "ptBR": "Dados de sal",
+      "ru": "Данные соли",
+      "pl": "Dane soli",
+      "tr": "Tuz Verileri",
+      "ja": "塩のデータ",
+      "ko": "소금 데이터",
+      "th": "ข้อมูลเกลือ",
+      "cs": "Údaje o soli"
+    }
+  },
+  {
+    "key": "极坐标",
+    "values": {
+      "en": "Polar Coordinates",
+      "de": "Polarkoordinaten",
+      "fr": "Coordonnées polaires",
+      "it": "Coordinate polari",
+      "es": "Coordenadas polares",
+      "ptBR": "Coordenadas polares",
+      "ru": "Полярные координаты",
+      "pl": "Współrzędne biegunowe",
+      "tr": "Kutupsal Koordinatlar",
+      "ja": "極座標",
+      "ko": "극좌표",
+      "th": "พิกัดเชิงขั้ว",
+      "cs": "Polární souřadnice"
+    }
+  },
+  {
+    "key": "碰撞体位置",
+    "values": {
+      "en": "Collider Position",
+      "de": "Kolliderposition",
+      "fr": "Position du collider",
+      "it": "Posizione del collider",
+      "es": "Posición del colisionador",
+      "ptBR": "Posição do colisor",
+      "ru": "Позиция коллайдера",
+      "pl": "Pozycja kolidera",
+      "tr": "Çarpıştırıcı Konumu",
+      "ja": "コライダー位置",
+      "ko": "콜라이더 위치",
+      "th": "ตำแหน่งคอลไลเดอร์",
+      "cs": "Poloha collideru"
+    }
+  },
+  {
+    "key": "恢复所有窗口",
+    "values": {
+      "en": "Restore All Windows",
+      "de": "Alle Fenster wiederherstellen",
+      "fr": "Restaurer toutes les fenêtres",
+      "it": "Ripristina tutte le finestre",
+      "es": "Restaurar todas las ventanas",
+      "ptBR": "Restaurar todas as janelas",
+      "ru": "Восстановить все окна",
+      "pl": "Przywróć wszystkie okna",
+      "tr": "Tüm Pencereleri Geri Yükle",
+      "ja": "すべてのウィンドウを復元",
+      "ko": "모든 창 복원",
+      "th": "คืนค่าหน้าต่างทั้งหมด",
+      "cs": "Obnovit všechna okna"
+    }
+  },
+  {
+    "key": "保存窗口布局",
+    "values": {
+      "en": "Save Window Layout",
+      "de": "Fensterlayout speichern",
+      "fr": "Enregistrer la disposition des fenêtres",
+      "it": "Salva layout finestre",
+      "es": "Guardar disposición de ventanas",
+      "ptBR": "Salvar layout das janelas",
+      "ru": "Сохранить расположение окон",
+      "pl": "Zapisz układ okien",
+      "tr": "Pencere Düzenini Kaydet",
+      "ja": "ウィンドウレイアウトを保存",
+      "ko": "창 레이아웃 저장",
+      "th": "บันทึกเค้าโครงหน้าต่าง",
+      "cs": "Uložit rozložení oken"
+    }
+  },
+  {
+    "key": "添加方向线",
+    "values": {
+      "en": "Add Lines",
+      "de": "Linien hinzufügen",
+      "fr": "Ajouter des lignes",
+      "it": "Aggiungi linee",
+      "es": "Agregar líneas",
+      "ptBR": "Adicionar linhas",
+      "ru": "Добавить линии",
+      "pl": "Dodaj linie",
+      "tr": "Çizgi Ekle",
+      "ja": "ラインを追加",
+      "ko": "선 추가",
+      "th": "เพิ่มเส้น",
+      "cs": "Přidat čáry"
+    }
+  },
+  {
+    "key": "添加标记点",
+    "values": {
+      "en": "Add Markers",
+      "de": "Markierungen hinzufügen",
+      "fr": "Ajouter des marqueurs",
+      "it": "Aggiungi marcatori",
+      "es": "Agregar marcadores",
+      "ptBR": "Adicionar marcadores",
+      "ru": "Добавить маркеры",
+      "pl": "Dodaj znaczniki",
+      "tr": "İşaret Ekle",
+      "ja": "マーカーを追加",
+      "ko": "마커 추가",
+      "th": "เพิ่มเครื่องหมาย",
+      "cs": "Přidat značky"
+    }
+  },
+  {
+    "key": "最优交接点计算",
+    "values": {
+      "en": "Optimal Handoff Point",
+      "de": "Optimaler Übergabepunkt",
+      "fr": "Point de transfert optimal",
+      "it": "Punto di passaggio ottimale",
+      "es": "Punto de transferencia óptimo",
+      "ptBR": "Ponto de transferência ideal",
+      "ru": "Оптимальная точка передачи",
+      "pl": "Optymalny punkt przekazania",
+      "tr": "Optimal Devir Noktası",
+      "ja": "最適な受け渡しポイント",
+      "ko": "최적 인계 지점",
+      "th": "จุดส่งต่อที่เหมาะสมที่สุด",
+      "cs": "Optimální předávací bod"
+    }
+  },
+  {
+    "key": "加水 → 路径",
+    "values": {
+      "en": "Ladle → Path",
+      "de": "Kelle → Pfad",
+      "fr": "Louche → Chemin",
+      "it": "Mestolo → Percorso",
+      "es": "Cucharón → Camino",
+      "ptBR": "Concha → Caminho",
+      "ru": "Черпак → Путь",
+      "pl": "Chochla → Ścieżka",
+      "tr": "Kepçe → Yol",
+      "ja": "お玉 → 経路",
+      "ko": "국자 → 경로",
+      "th": "ทัพพี → เส้นทาง",
+      "cs": "Naběračka → Cesta"
+    }
+  },
+  {
+    "key": "路径 → 加水",
+    "values": {
+      "en": "Path → Ladle",
+      "de": "Pfad → Kelle",
+      "fr": "Chemin → Louche",
+      "it": "Percorso → Mestolo",
+      "es": "Camino → Cucharón",
+      "ptBR": "Caminho → Concha",
+      "ru": "Путь → Черпак",
+      "pl": "Ścieżka → Chochla",
+      "tr": "Yol → Kepçe",
+      "ja": "経路 → お玉",
+      "ko": "경로 → 국자",
+      "th": "เส้นทาง → ทัพพี",
+      "cs": "Cesta → Naběračka"
+    }
+  },
+  {
+    "key": "漩涡 → 路径",
+    "values": {
+      "en": "Vortex → Path",
+      "de": "Wirbel → Pfad",
+      "fr": "Vortex → Chemin",
+      "it": "Vortice → Percorso",
+      "es": "Vórtice → Camino",
+      "ptBR": "Vórtice → Caminho",
+      "ru": "Вихрь → Путь",
+      "pl": "Wir → Ścieżka",
+      "tr": "Girdap → Yol",
+      "ja": "渦 → 経路",
+      "ko": "소용돌이 → 경로",
+      "th": "น้ำวน → เส้นทาง",
+      "cs": "Vír → Cesta"
+    }
+  },
+  {
+    "key": "漩涡 → 加水",
+    "values": {
+      "en": "Vortex → Ladle",
+      "de": "Wirbel → Kelle",
+      "fr": "Vortex → Louche",
+      "it": "Vortice → Mestolo",
+      "es": "Vórtice → Cucharón",
+      "ptBR": "Vórtice → Concha",
+      "ru": "Вихрь → Черпак",
+      "pl": "Wir → Chochla",
+      "tr": "Girdap → Kepçe",
+      "ja": "渦 → お玉",
+      "ko": "소용돌이 → 국자",
+      "th": "น้ำวน → ทัพพี",
+      "cs": "Vír → Naběračka"
+    }
+  },
+  {
+    "key": "计算中…",
+    "values": {
+      "en": "Calculating…",
+      "de": "Berechnung läuft…",
+      "fr": "Calcul en cours…",
+      "it": "Calcolo in corso…",
+      "es": "Calculando…",
+      "ptBR": "Calculando…",
+      "ru": "Вычисление…",
+      "pl": "Obliczanie…",
+      "tr": "Hesaplanıyor…",
+      "ja": "計算中…",
+      "ko": "계산 중…",
+      "th": "กำลังคำนวณ…",
+      "cs": "Výpočet…"
+    }
+  }
+]

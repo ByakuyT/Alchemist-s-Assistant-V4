@@ -1,0 +1,452 @@
+[
+  {
+    "key": "漩涡切向",
+    "values": {
+      "en": "Vortex Tangent",
+      "de": "Wirbeltangente",
+      "fr": "Tangente du vortex",
+      "it": "Tangente del vortice",
+      "es": "Tangente del vórtice",
+      "ptBR": "Tangente do vórtice",
+      "ru": "Касательная вихря",
+      "pl": "Styczna wiru",
+      "tr": "Girdap Teğeti",
+      "ja": "渦の接線",
+      "ko": "소용돌이 접선",
+      "th": "เส้นสัมผัสน้ำวน",
+      "cs": "Tečna víru"
+    }
+  },
+  {
+    "key": "路径方向",
+    "values": {
+      "en": "Path Direction",
+      "de": "Pfadrichtung",
+      "fr": "Direction du chemin",
+      "it": "Direzione del percorso",
+      "es": "Dirección del camino",
+      "ptBR": "Direção do caminho",
+      "ru": "Направление пути",
+      "pl": "Kierunek ścieżki",
+      "tr": "Yol Yönü",
+      "ja": "経路方向",
+      "ko": "경로 방향",
+      "th": "ทิศทางเส้นทาง",
+      "cs": "Směr cesty"
+    }
+  },
+  {
+    "key": "效果方向",
+    "values": {
+      "en": "Effect Direction",
+      "de": "Effektrichtung",
+      "fr": "Direction de l'effet",
+      "it": "Direzione dell'effetto",
+      "es": "Dirección del efecto",
+      "ptBR": "Direção do efeito",
+      "ru": "Направление эффекта",
+      "pl": "Kierunek efektu",
+      "tr": "Etki Yönü",
+      "ja": "効果方向",
+      "ko": "효과 방향",
+      "th": "ทิศทางเอฟเฟกต์",
+      "cs": "Směr efektu"
+    }
+  },
+  {
+    "key": "加水方向",
+    "values": {
+      "en": "Ladle Direction",
+      "de": "Kellenrichtung",
+      "fr": "Direction de la louche",
+      "it": "Direzione del mestolo",
+      "es": "Dirección del cucharón",
+      "ptBR": "Direção da concha",
+      "ru": "Направление черпака",
+      "pl": "Kierunek chochli",
+      "tr": "Kepçe Yönü",
+      "ja": "お玉の方向",
+      "ko": "국자 방향",
+      "th": "ทิศทางทัพพี",
+      "cs": "Směr naběračky"
+    }
+  },
+  {
+    "key": "漩涡方向",
+    "values": {
+      "en": "Vortex Direction",
+      "de": "Wirbelrichtung",
+      "fr": "Direction du vortex",
+      "it": "Direzione del vortice",
+      "es": "Dirección del vórtice",
+      "ptBR": "Direção do vórtice",
+      "ru": "Направление вихря",
+      "pl": "Kierunek wiru",
+      "tr": "Girdap Yönü",
+      "ja": "渦の方向",
+      "ko": "소용돌이 방향",
+      "th": "ทิศทางน้ำวน",
+      "cs": "Směr víru"
+    }
+  },
+  {
+    "key": "近点方向",
+    "values": {
+      "en": "Nearest Point Direction",
+      "de": "Richtung zum nächsten Punkt",
+      "fr": "Direction du point le plus proche",
+      "it": "Direzione del punto più vicino",
+      "es": "Dirección del punto más cercano",
+      "ptBR": "Direção do ponto mais próximo",
+      "ru": "Направление к ближайшей точке",
+      "pl": "Kierunek do najbliższego punktu",
+      "tr": "En Yakın Nokta Yönü",
+      "ja": "最近点の方向",
+      "ko": "최근접점 방향",
+      "th": "ทิศทางจุดใกล้สุด",
+      "cs": "Směr k nejbližšímu bodu"
+    }
+  },
+  {
+    "key": "旋转角度",
+    "values": {
+      "en": "Rotation Angle",
+      "de": "Drehwinkel",
+      "fr": "Angle de rotation",
+      "it": "Angolo di rotazione",
+      "es": "Ángulo de rotación",
+      "ptBR": "Ângulo de rotação",
+      "ru": "Угол поворота",
+      "pl": "Kąt obrotu",
+      "tr": "Dönüş Açısı",
+      "ja": "回転角度",
+      "ko": "회전 각도",
+      "th": "มุมการหมุน",
+      "cs": "Úhel otočení"
+    }
+  },
+  {
+    "key": "搅拌进度",
+    "values": {
+      "en": "Stir Progress",
+      "de": "Rührfortschritt",
+      "fr": "Progression du mélange",
+      "it": "Avanzamento del mescolamento",
+      "es": "Progreso de agitación",
+      "ptBR": "Progresso da mistura",
+      "ru": "Прогресс перемешивания",
+      "pl": "Postęp mieszania",
+      "tr": "Karıştırma İlerlemesi",
+      "ja": "攪拌進行度",
+      "ko": "저어 섞기 진행도",
+      "th": "ความคืบหน้าการคน",
+      "cs": "Průběh míchání"
+    }
+  },
+  {
+    "key": "阶段进度",
+    "values": {
+      "en": "Phase Progress",
+      "de": "Phasenfortschritt",
+      "fr": "Progression de la phase",
+      "it": "Avanzamento della fase",
+      "es": "Progreso de fase",
+      "ptBR": "Progresso da fase",
+      "ru": "Прогресс фазы",
+      "pl": "Postęp fazy",
+      "tr": "Aşama İlerlemesi",
+      "ja": "フェーズ進行度",
+      "ko": "단계 진행도",
+      "th": "ความคืบหน้าเฟส",
+      "cs": "Průběh fáze"
+    }
+  },
+  {
+    "key": "研磨进度",
+    "values": {
+      "en": "Grind Progress",
+      "de": "Mahlfortschritt",
+      "fr": "Progression du broyage",
+      "it": "Avanzamento della macinazione",
+      "es": "Progreso de molienda",
+      "ptBR": "Progresso da moagem",
+      "ru": "Прогресс измельчения",
+      "pl": "Postęp mielenia",
+      "tr": "Öğütme İlerlemesi",
+      "ja": "粉砕進行度",
+      "ko": "분쇄 진행도",
+      "th": "ความคืบหน้าการบด",
+      "cs": "Průběh mletí"
+    }
+  },
+  {
+    "key": "沼泽长度",
+    "values": {
+      "en": "Swamp Length",
+      "de": "Sumpflänge",
+      "fr": "Longueur du marais",
+      "it": "Lunghezza della palude",
+      "es": "Longitud del pantano",
+      "ptBR": "Comprimento do pântano",
+      "ru": "Длина болота",
+      "pl": "Długość bagna",
+      "tr": "Bataklık Uzunluğu",
+      "ja": "沼地の長さ",
+      "ko": "늪 길이",
+      "th": "ความยาวหนองน้ำ",
+      "cs": "Délka bažiny"
+    }
+  },
+  {
+    "key": "搅拌阶段",
+    "values": {
+      "en": "Stir Phase",
+      "de": "Rührphase",
+      "fr": "Phase de mélange",
+      "it": "Fase di mescolamento",
+      "es": "Fase de agitación",
+      "ptBR": "Fase da mistura",
+      "ru": "Фаза перемешивания",
+      "pl": "Faza mieszania",
+      "tr": "Karıştırma Aşaması",
+      "ja": "攪拌フェーズ",
+      "ko": "저어 섞기 단계",
+      "th": "เฟสการคน",
+      "cs": "Fáze míchání"
+    }
+  },
+  {
+    "key": "加血需求",
+    "values": {
+      "en": "Healing Requirement",
+      "de": "Heilungsanforderung",
+      "fr": "Besoin de guérison",
+      "it": "Fabbisogno di guarigione",
+      "es": "Requisito de curación",
+      "ptBR": "Necessidade de cura",
+      "ru": "Требование исцеления",
+      "pl": "Wymóg leczenia",
+      "tr": "İyileştirme Gereksinimi",
+      "ja": "回復必要量",
+      "ko": "치유 요구량",
+      "th": "ความต้องการการรักษา",
+      "cs": "Požadavek léčení"
+    }
+  },
+  {
+    "key": "总体偏离",
+    "values": {
+      "en": "Total Deviation",
+      "de": "Gesamtabweichung",
+      "fr": "Déviation totale",
+      "it": "Deviazione totale",
+      "es": "Desviación total",
+      "ptBR": "Desvio total",
+      "ru": "Общее отклонение",
+      "pl": "Całkowite odchylenie",
+      "tr": "Toplam Sapma",
+      "ja": "合計偏差",
+      "ko": "총 편차",
+      "th": "ค่าเบี่ยงเบนรวม",
+      "cs": "Celková odchylka"
+    }
+  },
+  {
+    "key": "位置偏离",
+    "values": {
+      "en": "Position Deviation",
+      "de": "Positionsabweichung",
+      "fr": "Déviation de position",
+      "it": "Deviazione di posizione",
+      "es": "Desviación de posición",
+      "ptBR": "Desvio de posição",
+      "ru": "Отклонение позиции",
+      "pl": "Odchylenie pozycji",
+      "tr": "Konum Sapması",
+      "ja": "位置偏差",
+      "ko": "위치 편차",
+      "th": "ค่าเบี่ยงเบนตำแหน่ง",
+      "cs": "Odchylka polohy"
+    }
+  },
+  {
+    "key": "旋转偏离",
+    "values": {
+      "en": "Rotation Deviation",
+      "de": "Rotationsabweichung",
+      "fr": "Déviation de rotation",
+      "it": "Deviazione di rotazione",
+      "es": "Desviación de rotación",
+      "ptBR": "Desvio de rotação",
+      "ru": "Отклонение вращения",
+      "pl": "Odchylenie obrotu",
+      "tr": "Dönüş Sapması",
+      "ja": "回転偏差",
+      "ko": "회전 편차",
+      "th": "ค่าเบี่ยงเบนการหมุน",
+      "cs": "Odchylka otočení"
+    }
+  },
+  {
+    "key": "最大距离",
+    "values": {
+      "en": "Maximum Distance",
+      "de": "Maximale Entfernung",
+      "fr": "Distance maximale",
+      "it": "Distanza massima",
+      "es": "Distancia máxima",
+      "ptBR": "Distância máxima",
+      "ru": "Максимальное расстояние",
+      "pl": "Maksymalna odległość",
+      "tr": "Maksimum Mesafe",
+      "ja": "最大距離",
+      "ko": "최대 거리",
+      "th": "ระยะทางสูงสุด",
+      "cs": "Maximální vzdálenost"
+    }
+  },
+  {
+    "key": "漩涡距离",
+    "values": {
+      "en": "Vortex Distance",
+      "de": "Wirbelentfernung",
+      "fr": "Distance du vortex",
+      "it": "Distanza dal vortice",
+      "es": "Distancia al vórtice",
+      "ptBR": "Distância do vórtice",
+      "ru": "Расстояние до вихря",
+      "pl": "Odległość od wiru",
+      "tr": "Girdap Mesafesi",
+      "ja": "渦までの距離",
+      "ko": "소용돌이 거리",
+      "th": "ระยะทางถึงน้ำวน",
+      "cs": "Vzdálenost od víru"
+    }
+  },
+  {
+    "key": "碰撞偏移",
+    "values": {
+      "en": "Collision Offset",
+      "de": "Kolliderversatz",
+      "fr": "Décalage du collider",
+      "it": "Offset del collider",
+      "es": "Desplazamiento del colisionador",
+      "ptBR": "Deslocamento do colisor",
+      "ru": "Смещение коллайдера",
+      "pl": "Przesunięcie kolidera",
+      "tr": "Çarpıştırıcı Ofseti",
+      "ja": "コライダーオフセット",
+      "ko": "콜라이더 오프셋",
+      "th": "ค่าชดเชยคอลไลเดอร์",
+      "cs": "Posun collideru"
+    }
+  },
+  {
+    "key": "坐标位置",
+    "values": {
+      "en": "Position",
+      "de": "Position",
+      "fr": "Position",
+      "it": "Posizione",
+      "es": "Posición",
+      "ptBR": "Posição",
+      "ru": "Позиция",
+      "pl": "Pozycja",
+      "tr": "Konum",
+      "ja": "座標位置",
+      "ko": "좌표 위치",
+      "th": "ตำแหน่ง",
+      "cs": "Poloha"
+    }
+  },
+  {
+    "key": "漩涡切角",
+    "values": {
+      "en": "Vortex Tangent Angle",
+      "de": "Wirbeltangentenwinkel",
+      "fr": "Angle tangent du vortex",
+      "it": "Angolo tangente del vortice",
+      "es": "Ángulo tangente del vórtice",
+      "ptBR": "Ângulo tangente do vórtice",
+      "ru": "Угол касательной вихря",
+      "pl": "Kąt stycznej wiru",
+      "tr": "Girdap Teğet Açısı",
+      "ja": "渦の接線角度",
+      "ko": "소용돌이 접선 각도",
+      "th": "มุมสัมผัสน้ำวน",
+      "cs": "Úhel tečny víru"
+    }
+  },
+  {
+    "key": "效果夹角",
+    "values": {
+      "en": "Effect Angle",
+      "de": "Effektwinkel",
+      "fr": "Angle de l'effet",
+      "it": "Angolo dell'effetto",
+      "es": "Ángulo del efecto",
+      "ptBR": "Ângulo do efeito",
+      "ru": "Угол эффекта",
+      "pl": "Kąt efektu",
+      "tr": "Etki Açısı",
+      "ja": "効果の角度",
+      "ko": "효과 각도",
+      "th": "มุมเอฟเฟกต์",
+      "cs": "Úhel efektu"
+    }
+  },
+  {
+    "key": "当前血量",
+    "values": {
+      "en": "Current Health",
+      "de": "Aktuelle Gesundheit",
+      "fr": "Santé actuelle",
+      "it": "Salute attuale",
+      "es": "Salud actual",
+      "ptBR": "Vida atual",
+      "ru": "Текущее здоровье",
+      "pl": "Aktualne zdrowie",
+      "tr": "Mevcut Sağlık",
+      "ja": "現在HP",
+      "ko": "현재 체력",
+      "th": "พลังชีวิตปัจจุบัน",
+      "cs": "Aktuální zdraví"
+    }
+  },
+  {
+    "key": "路径近点",
+    "values": {
+      "en": "Nearest Path Point",
+      "de": "Nächster Pfadpunkt",
+      "fr": "Point le plus proche du chemin",
+      "it": "Punto più vicino del percorso",
+      "es": "Punto más cercano del camino",
+      "ptBR": "Ponto mais próximo do caminho",
+      "ru": "Ближайшая точка пути",
+      "pl": "Najbliższy punkt ścieżki",
+      "tr": "Yola En Yakın Nokta",
+      "ja": "経路最近点",
+      "ko": "경로 최근접점",
+      "th": "จุดใกล้สุดบนเส้นทาง",
+      "cs": "Nejbližší bod cesty"
+    }
+  },
+  {
+    "key": "加水近点",
+    "values": {
+      "en": "Nearest Ladle Point",
+      "de": "Nächster Kellenpunkt",
+      "fr": "Point le plus proche de la louche",
+      "it": "Punto più vicino del mestolo",
+      "es": "Punto más cercano del cucharón",
+      "ptBR": "Ponto mais próximo da concha",
+      "ru": "Ближайшая точка черпака",
+      "pl": "Najbliższy punkt chochli",
+      "tr": "Kepçeye En Yakın Nokta",
+      "ja": "お玉最近点",
+      "ko": "국자 최근접점",
+      "th": "จุดใกล้สุดของทัพพี",
+      "cs": "Nejbližší bod naběračky"
+    }
+  }
+]

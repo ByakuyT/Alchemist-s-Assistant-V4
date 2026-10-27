@@ -1,0 +1,182 @@
+[
+  {
+    "key": "功能面板",
+    "values": {
+      "en": "Feature Panel (AI translation)",
+      "de": "Funktionspanel (KI-Übersetzung)",
+      "fr": "Panneau de fonctions (traduction par IA)",
+      "it": "Pannello funzioni (traduzione IA)",
+      "es": "Panel de funciones (traducción por IA)",
+      "ptBR": "Painel de recursos (tradução por IA)",
+      "ru": "Панель функций (перевод ИИ)",
+      "pl": "Panel funkcji (tłumaczenie AI)",
+      "tr": "Özellik Paneli (AI çevirisi)",
+      "ja": "機能パネル（AI翻訳）",
+      "ko": "기능 패널 (AI 번역)",
+      "th": "แผงคุณสมบัติ (แปลโดย AI)",
+      "cs": "Panel funkcí (překlad AI)"
+    }
+  },
+  {
+    "key": "路径信息",
+    "values": {
+      "en": "Path Status",
+      "de": "Pfadstatus",
+      "fr": "État du chemin",
+      "it": "Stato del percorso",
+      "es": "Estado del camino",
+      "ptBR": "Status do caminho",
+      "ru": "Состояние пути",
+      "pl": "Status ścieżki",
+      "tr": "Yol Durumu",
+      "ja": "経路情報",
+      "ko": "경로 정보",
+      "th": "สถานะเส้นทาง",
+      "cs": "Stav cesty"
+    }
+  },
+  {
+    "key": "加水信息",
+    "values": {
+      "en": "Ladle Status",
+      "de": "Kellenstatus",
+      "fr": "État de la louche",
+      "it": "Stato del mestolo",
+      "es": "Estado del cucharón",
+      "ptBR": "Status da concha",
+      "ru": "Состояние черпака",
+      "pl": "Status chochli",
+      "tr": "Kepçe Durumu",
+      "ja": "お玉情報",
+      "ko": "국자 정보",
+      "th": "สถานะทัพพี",
+      "cs": "Stav naběračky"
+    }
+  },
+  {
+    "key": "移动信息",
+    "values": {
+      "en": "Movement Status",
+      "de": "Bewegungsstatus",
+      "fr": "État du mouvement",
+      "it": "Stato del movimento",
+      "es": "Estado del movimiento",
+      "ptBR": "Status do movimento",
+      "ru": "Состояние движения",
+      "pl": "Status ruchu",
+      "tr": "Hareket Durumu",
+      "ja": "移動情報",
+      "ko": "이동 정보",
+      "th": "สถานะการเคลื่อนที่",
+      "cs": "Stav pohybu"
+    }
+  },
+  {
+    "key": "目标效果",
+    "values": {
+      "en": "Target Effect",
+      "de": "Zieleffekt",
+      "fr": "Effet cible",
+      "it": "Effetto bersaglio",
+      "es": "Efecto objetivo",
+      "ptBR": "Efeito alvo",
+      "ru": "Целевой эффект",
+      "pl": "Efekt docelowy",
+      "tr": "Hedef Etki",
+      "ja": "ターゲット効果",
+      "ko": "대상 효과",
+      "th": "เอฟเฟกต์เป้าหมาย",
+      "cs": "Cílový efekt"
+    }
+  },
+  {
+    "key": "酿造信息",
+    "values": {
+      "en": "Brewing Status",
+      "de": "Braustatus",
+      "fr": "État de la préparation",
+      "it": "Stato della preparazione",
+      "es": "Estado de la elaboración",
+      "ptBR": "Status da preparação",
+      "ru": "Состояние варки",
+      "pl": "Status warzenia",
+      "tr": "Demleme Durumu",
+      "ja": "醸造情報",
+      "ko": "양조 정보",
+      "th": "สถานะการต้มยา",
+      "cs": "Stav vaření"
+    }
+  },
+  {
+    "key": "效果偏离",
+    "values": {
+      "en": "Effect Deviation",
+      "de": "Effektabweichung",
+      "fr": "Déviation de l'effet",
+      "it": "Deviazione dell'effetto",
+      "es": "Desviación del efecto",
+      "ptBR": "Desvio do efeito",
+      "ru": "Отклонение эффекта",
+      "pl": "Odchylenie efektu",
+      "tr": "Etki Sapması",
+      "ja": "効果偏差",
+      "ko": "효과 편차",
+      "th": "ค่าเบี่ยงเบนเอฟเฟกต์",
+      "cs": "Odchylka efektu"
+    }
+  },
+  {
+    "key": "活跃漩涡",
+    "values": {
+      "en": "Active Vortex",
+      "de": "Aktiver Wirbel",
+      "fr": "Vortex actif",
+      "it": "Vortice attivo",
+      "es": "Vórtice activo",
+      "ptBR": "Vórtice ativo",
+      "ru": "Активный вихрь",
+      "pl": "Aktywny wir",
+      "tr": "Aktif Girdap",
+      "ja": "アクティブな渦",
+      "ko": "활성 소용돌이",
+      "th": "น้ำวนที่ทำงานอยู่",
+      "cs": "Aktivní vír"
+    }
+  },
+  {
+    "key": "目标漩涡",
+    "values": {
+      "en": "Target Vortex",
+      "de": "Zielwirbel",
+      "fr": "Vortex cible",
+      "it": "Vortice bersaglio",
+      "es": "Vórtice objetivo",
+      "ptBR": "Vórtice alvo",
+      "ru": "Целевой вихрь",
+      "pl": "Wir docelowy",
+      "tr": "Hedef Girdap",
+      "ja": "ターゲット渦",
+      "ko": "대상 소용돌이",
+      "th": "น้ำวนเป้าหมาย",
+      "cs": "Cílový vír"
+    }
+  },
+  {
+    "key": "研磨信息",
+    "values": {
+      "en": "Grind Status",
+      "de": "Mahlstatus",
+      "fr": "État du broyage",
+      "it": "Stato della macinazione",
+      "es": "Estado de la molienda",
+      "ptBR": "Status da moagem",
+      "ru": "Состояние измельчения",
+      "pl": "Status mielenia",
+      "tr": "Öğütme Durumu",
+      "ja": "粉砕情報",
+      "ko": "분쇄 정보",
+      "th": "สถานะการบด",
+      "cs": "Stav mletí"
+    }
+  }
+]
