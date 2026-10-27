@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using PotionCraft.ObjectBased.RecipeMap.RecipeMapItem.PotionEffectMapItem;
-using PotionCraft.ObjectBased.RecipeMap.RecipeMapItem.VortexMapItem;
 using UnityEngine;
 
 namespace System.Runtime.CompilerServices
@@ -17,13 +17,19 @@ namespace AlchAssV4
     {
         #region 只读数据
 
-        public static readonly Dictionary<string, int> MapId = new() { { "Water", 0 }, { "Oil", 1 }, { "Wine", 2 } };
+        public const double EffectRad = 1.53;
+        public const double IndicatorRad = 0.74;
+
+        public static readonly IReadOnlyDictionary<string, int> MapId = new Dictionary<string, int>
+            { { "Water", 0 }, { "Oil", 1 }, { "Wine", 2 } };
 
         #endregion
 
         #region 功能开关
 
         public static bool DoPathCurve = false;
+
+        public static bool DoVortexCurve = false;
 
         // 0 - 路径切向线; 1 - 加水方向线; 2 - 效果径向线; 3 - 漩涡径向线; 4 - 漩涡切向线
         public static bool[] DoLines = [false, false, false, false, false];
@@ -33,7 +39,8 @@ namespace AlchAssV4
         #region 状态数据
 
         public static int HandoffRunning = -1;
-        public static Vector3 Offset;
+        public static Vec2D Offset;
+        public static Spiral? SpiralPhysical;
 
         public static PotionEffectMapItem TargetEffect;
 
@@ -41,12 +48,12 @@ namespace AlchAssV4
         public static int[] VortexIndex = [-1, -1];
 
         // 0 - 效果； 1 - 漩涡
-        public static Vector2?[] HandoffPositions = [null, null];
+        public static Vec2D?[] HandoffPositions = [null, null];
 
         // 0 - 路径和效果; 1 - 路径和漩涡; 2 - 加水和效果; 3 - 加水和漩涡
-        public static List<Vector2>[] IntersectionPositions = [[], [], [], []];
+        public static List<Vec2D>[] IntersectionPositions = [[], [], [], []];
 
-        public static List<(Vector3, bool)> PathPhysical = [];
+        public static List<(Vec2D, bool)> PathPhysical = [];
 
         // 0 - 水; 1 - 油
         public static List<Vortex>[] Vortexs = [[], []];
@@ -60,15 +67,26 @@ namespace AlchAssV4
         /// </summary>
         public struct Vortex
         {
-            public Vector3 Pos;
+            public Vec2D Pos;
             public double Rad;
+        }
+
+        /// <summary>
+        /// 漩涡螺线
+        /// </summary>
+        public struct Spiral
+        {
+            public Vec2D Pos;
+            public double Rot, MaxAngle, MinAngle;
+            public double A => 1 / (2 * Math.PI);
         }
 
         /// <summary>
         /// double向量
         /// </summary>
-        public readonly record struct Vec2D(double X, double Y)
+        public readonly struct Vec2D(double x, double y)
         {
+            public readonly double X = x, Y = y;
             public static Vec2D From(Vector3 v) => new(v.x, v.y);
             public static Vec2D From(Vector2 v) => new(v.x, v.y);
             public Vector3 ToVec3() => new((float)X, (float)Y, 0f);
@@ -87,14 +105,9 @@ namespace AlchAssV4
         /// <summary>
         /// 多项式
         /// </summary>
-        public readonly record struct Poly
+        public readonly struct Poly(params double[] cofs)
         {
-            private readonly double[] _cofs;
-
-            public Poly(params double[] cofs)
-            {
-                _cofs = cofs == null ? null : Trim(cofs);
-            }
+            private readonly double[] _cofs = cofs == null ? null : Trim(cofs);
 
             private static double[] Trim(double[] cofs)
             {
@@ -121,9 +134,7 @@ namespace AlchAssV4
             public Poly NormalizedInf()
             {
                 if (Degree < 0) return default;
-                var r = 0.0;
-                foreach (var cof in _cofs)
-                    r = Math.Max(r, Math.Abs(cof));
+                var r = _cofs.Select(Math.Abs).Prepend(0.0).Max();
                 return this * (1 / r);
             }
 
@@ -176,6 +187,99 @@ namespace AlchAssV4
                 for (var j = 0; j <= b.Degree; j++)
                     t[i + j] += a._cofs[i] * b._cofs[j];
                 return new Poly(t);
+            }
+        }
+
+        public readonly struct Interval
+        {
+            public readonly double L, H;
+
+            public Interval(double l, double h)
+            {
+                if (double.IsNaN(l) || double.IsNaN(h) || l > h)
+                {
+                    L = double.NaN;
+                    H = double.NaN;
+                }
+                else
+                {
+                    L = l;
+                    H = h;
+                }
+            }
+
+            public bool IsEmpty => double.IsNaN(L) || double.IsNaN(H);
+            public static Interval Empty => new(double.NaN, double.NaN);
+            public static Interval Point(double x) => new(x, x);
+
+            public static Interval operator -(Interval a) =>
+                a.IsEmpty ? Empty : new(Algebra.Down(-a.H), Algebra.Up(-a.L));
+
+            public static Interval operator *(Interval a, double k)
+            {
+                if (a.IsEmpty || double.IsNaN(k)) return Empty;
+                if (k == 0.0) return new(0.0, 0.0);
+                return k > 0.0
+                    ? new(Algebra.Down(a.L * k), Algebra.Up(a.H * k))
+                    : new(Algebra.Down(a.H * k), Algebra.Up(a.L * k));
+            }
+
+            public static Interval operator *(double k, Interval a) => a * k;
+
+            public static Interval operator +(Interval a, Interval b)
+            {
+                if (a.IsEmpty || b.IsEmpty) return Empty;
+                return new(Algebra.Down(a.L + b.L), Algebra.Up(a.H + b.H));
+            }
+
+            public static Interval operator -(Interval a, Interval b)
+            {
+                if (a.IsEmpty || b.IsEmpty) return Empty;
+                return new(Algebra.Down(a.L - b.H), Algebra.Up(a.H - b.L));
+            }
+
+            public static Interval operator *(Interval a, Interval b)
+            {
+                if (a.IsEmpty || b.IsEmpty) return Empty;
+                var l = Math.Min(Math.Min(Algebra.Down(a.L * b.L), Algebra.Down(a.L * b.H)),
+                    Math.Min(Algebra.Down(a.H * b.L), Algebra.Down(a.H * b.H)));
+                var h = Math.Max(Math.Max(Algebra.Up(a.L * b.L), Algebra.Up(a.L * b.H)),
+                    Math.Max(Algebra.Up(a.H * b.L), Algebra.Up(a.H * b.H)));
+                return new(l, h);
+            }
+
+            public Interval Sqrt()
+            {
+                if (IsEmpty || H <= 0.0) return Empty;
+                var l = L <= 0.0 ? 0.0 : Algebra.Down(Math.Sqrt(L));
+                var h = Algebra.Up(Math.Sqrt(H));
+                return new(l, h);
+            }
+
+            public Interval Sin()
+            {
+                if (IsEmpty) return Empty;
+                var l = Math.Min(Algebra.Down(Math.Sin(L)), Algebra.Down(Math.Sin(H)));
+                var h = Math.Max(Algebra.Up(Math.Sin(L)), Algebra.Up(Math.Sin(H)));
+                if (Contains(Math.PI / 2, 2 * Math.PI)) h = 1.0;
+                if (Contains(-Math.PI / 2, 2 * Math.PI)) l = -1.0;
+                return new(l, h);
+            }
+
+            public Interval Cos()
+            {
+                if (IsEmpty) return Empty;
+                var l = Math.Min(Algebra.Down(Math.Cos(L)), Algebra.Down(Math.Cos(H)));
+                var h = Math.Max(Algebra.Up(Math.Cos(L)), Algebra.Up(Math.Cos(H)));
+                if (Contains(0.0, 2 * Math.PI)) h = 1.0;
+                if (Contains(Math.PI, 2 * Math.PI)) l = -1.0;
+                return new(l, h);
+            }
+
+            private bool Contains(double baseVal, double period)
+            {
+                var k = Math.Ceiling((L - baseVal) / period);
+                return baseVal + k * period <= H;
             }
         }
 

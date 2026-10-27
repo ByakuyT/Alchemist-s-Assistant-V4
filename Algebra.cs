@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AlchAssV4
 {
@@ -50,6 +51,7 @@ namespace AlchAssV4
                     mf = false;
 
                 var fs = f(s);
+                if (double.IsNaN(fs)) return double.NaN;
                 d = c;
                 c = b;
                 fc = fb;
@@ -96,13 +98,8 @@ namespace AlchAssV4
                     FindAllRoots(poly.Derivative(), l, r, out var crits);
                     crits.Insert(0, l);
                     crits.Add(r);
-                    foreach (var x in crits)
-                    {
-                        var y = poly.Evaluate(x);
-                        if (Math.Abs(y) < 1e-10)
-                            AddUniqueRoot(roots, x);
-                    }
-
+                    foreach (var x in from x in crits let y = poly.Evaluate(x) where Math.Abs(y) < 1e-10 select x)
+                        AddUniqueRoot(roots, x);
                     for (var i = 0; i < crits.Count - 1; i++)
                     {
                         var x0 = crits[i];
@@ -128,12 +125,45 @@ namespace AlchAssV4
         /// <summary>
         /// 添加不重复的根
         /// </summary>
-        public static void AddUniqueRoot(List<double> roots, double value)
+        private static void AddUniqueRoot(List<double> roots, double value)
         {
-            foreach (var root in roots)
-                if (Math.Abs(value - root) < 1e-10)
-                    return;
+            if (roots.Any(root => Math.Abs(value - root) < 1e-10))
+                return;
             roots.Add(value);
+        }
+
+        /// <summary>
+        /// Math.BitIncrement(double)
+        /// </summary>
+        public static double Up(double x)
+        {
+            var bits = BitConverter.DoubleToInt64Bits(x);
+            if ((bits & 0x7FF0000000000000L) == 0x7FF0000000000000L)
+            {
+                if ((bits & 0x000FFFFFFFFFFFFFL) != 0 || bits > 0) return x;
+                return -double.MaxValue;
+            }
+
+            if (bits == long.MinValue) return double.Epsilon;
+            bits += (bits < 0) ? -1 : 1;
+            return BitConverter.Int64BitsToDouble(bits);
+        }
+
+        /// <summary>
+        /// Math.BitDecrement(double)
+        /// </summary>
+        public static double Down(double x)
+        {
+            var bits = BitConverter.DoubleToInt64Bits(x);
+            if ((bits & 0x7FF0000000000000L) == 0x7FF0000000000000L)
+            {
+                if ((bits & 0x000FFFFFFFFFFFFFL) != 0 || bits < 0) return x;
+                return double.MaxValue;
+            }
+
+            if (bits == 0L) return -double.Epsilon;
+            bits += (bits < 0) ? 1 : -1;
+            return BitConverter.Int64BitsToDouble(bits);
         }
 
         #endregion

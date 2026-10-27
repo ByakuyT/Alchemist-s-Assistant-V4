@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BepInEx;
 using PotionCraft.ManagersSystem;
-using UnityEngine;
 
 namespace AlchAssV4
 {
@@ -14,22 +14,22 @@ namespace AlchAssV4
         /// <summary>
         /// 计算路径 → 加水
         /// </summary>
-        public static Vector2? PathToLadle(List<(Vector3, bool)> path, Vector3 offset, Vector3 cen, double rad)
+        private static Variable.Vec2D? PathToLadle(List<(Variable.Vec2D, bool)> path, Variable.Vec2D O,
+            Variable.Vec2D C,
+            double rad)
         {
             if (path.Count < 2) return null;
-            var O = Variable.Vec2D.From(offset);
-            var C = Variable.Vec2D.From(cen);
             var gate = new object();
             var bestP = (double.PositiveInfinity, -1, 0.0);
             Parallel.For(0, path.Count, () => (double.PositiveInfinity, -1, 0.0),
                 (i, _, local) =>
                 {
-                    var B = Variable.Vec2D.From(path[i].Item1);
-                    Geometry.LineVsCircle(B, O, C, rad, out var _, out var ti);
-                    var cur = (ti.Count > 0 ? ti[0] * (O - B).Magnitude : double.PositiveInfinity, i, 0.0);
-                    local = Better(cur, local) ? cur : local;
+                    var B = path[i].Item1;
+                    Geometry.LineVsCircle(B, O, C, rad, out var ti);
+                    var cur = (ti.HasValue ? ti.Value * (O - B).Magnitude : double.PositiveInfinity, i, 0.0);
+                    local = Better(cur, local);
                     if (i == path.Count - 1 || path[i + 1].Item2) return local;
-                    var D = Variable.Vec2D.From(path[i + 1].Item1) - B;
+                    var D = path[i + 1].Item1 - B;
                     var U = B - C;
                     var W = O - B;
                     var d2 = D.SqrMagnitude;
@@ -72,7 +72,7 @@ namespace AlchAssV4
                         }
 
                         var cu2 = (t * Math.Sqrt(ar), i, ri);
-                        local = Better(cu2, local) ? cu2 : local;
+                        local = Better(cu2, local);
                     }
 
                     return local;
@@ -80,15 +80,54 @@ namespace AlchAssV4
                 local =>
                 {
                     lock (gate)
-                        if (Better(local, bestP))
-                            bestP = local;
+                        bestP = Better(local, bestP);
                 });
             if (bestP.Item2 < 0) return null;
             if (bestP.Item2 == path.Count - 1)
                 return path[bestP.Item2].Item1;
-            var B = Variable.Vec2D.From(path[bestP.Item2].Item1);
-            var D = Variable.Vec2D.From(path[bestP.Item2 + 1].Item1) - B;
-            return (B + D * bestP.Item3).ToVec2();
+            var B = path[bestP.Item2].Item1;
+            var D = path[bestP.Item2 + 1].Item1 - B;
+            return B + D * bestP.Item3;
+        }
+
+        /// <summary>
+        /// 计算漩涡 → 加水
+        /// </summary>
+        private static Variable.Vec2D? VortexToLadle(Variable.Spiral? spiral, Variable.Vec2D O, Variable.Vec2D C,
+            double rad)
+        {
+            if (spiral == null) return null;
+            var S = spiral.Value;
+            var bestP = (double.PositiveInfinity, 0.0);
+            bestP = Better(SpiralPoint(S, S.MinAngle, O, C, rad), bestP);
+            var width = S.MaxAngle - S.MinAngle;
+            if (width > 1e-10)
+            {
+                var n = Math.Max(1, (int)Math.Ceiling(width / Math.PI * 16.0));
+                var span = width / n;
+                var partitions = new (double, double)[n];
+                for (var i = 0; i < n; i++)
+                {
+                    var a = S.MinAngle + i * span;
+                    var b = (i == n - 1) ? S.MaxAngle : S.MinAngle + (i + 1) * span;
+                    partitions[i] = (a, b);
+                }
+
+                var locals = new List<double>[n];
+                Parallel.For(0, n,
+                    i => locals[i] = SolvePartition(partitions[i].Item1, partitions[i].Item2, S, O, C, rad));
+                var rootl = locals.SelectMany(l => l).OrderBy(x => x).ToList();
+                var roots = new List<double>();
+                foreach (var r in rootl)
+                    if (roots.Count == 0 || Math.Abs(roots[roots.Count - 1] - r) > 1e-10)
+                        roots.Add(r);
+                foreach (var r in roots)
+                    bestP = Better(SpiralPoint(S, r, O, C, rad), bestP);
+                bestP = Better(SpiralPoint(S, S.MaxAngle, O, C, rad), bestP);
+            }
+
+            return new(S.Pos.X + S.A * bestP.Item2 * Math.Cos(bestP.Item2 + S.Rot),
+                S.Pos.Y + S.A * bestP.Item2 * Math.Sin(bestP.Item2 + S.Rot));
         }
 
         #endregion
@@ -100,26 +139,27 @@ namespace AlchAssV4
         /// </summary>
         public static void StartPathToLadle()
         {
-            ClearHandoff();
-            if (!Variable.DoPathCurve || !Variable.DoLines[1]) return;
-            var doEffect = Variable.TargetEffect != null && Variable.IntersectionPositions[0].Count == 0;
-            var mapId = Variable.MapId[Managers.RecipeMap.currentMap.potionBase.name];
-            var vortexId = mapId < 2 ? Variable.VortexIndex[mapId] : -1;
-            var doVortex = vortexId >= 0 && Variable.IntersectionPositions[1].Count == 0;
-            var effectPos = doEffect ? Variable.TargetEffect.transform.localPosition : default;
-            var selVortex = doVortex ? Variable.Vortexs[mapId][vortexId] : default;
-            var path = new List<(Vector3, bool)>(Variable.PathPhysical);
+            if (Variable.HandoffRunning >= 0) return;
+            Variable.HandoffRunning = 0;
+            if (!Variable.DoPathCurve || !Variable.DoLines[1])
+            {
+                Variable.HandoffRunning = -1;
+                return;
+            }
+
+            var path = new List<(Variable.Vec2D, bool)>(Variable.PathPhysical);
             var offset = Variable.Offset;
+            GetEffectAndVortex(out var doEffect, out var doVortex, out var effectPos, out var vortexPos,
+                out var vortexRad);
             ThreadingHelper.Instance.StartAsyncInvoke(() =>
             {
-                var effectHandoff = doEffect ? PathToLadle(path, offset, effectPos, 1.53) : null;
-                var vortexHandoff = doVortex ? PathToLadle(path, offset, selVortex.Pos, selVortex.Rad) : null;
+                var effectHandoff = doEffect ? PathToLadle(path, offset, effectPos, Variable.EffectRad) : null;
+                var vortexHandoff = doVortex ? PathToLadle(path, offset, vortexPos, vortexRad) : null;
                 return () =>
                 {
-                    if (effectHandoff.HasValue)
-                        Variable.HandoffPositions[0] = effectHandoff.Value;
-                    if (vortexHandoff.HasValue)
-                        Variable.HandoffPositions[1] = vortexHandoff.Value;
+                    Variable.HandoffPositions[0] = effectHandoff;
+                    Variable.HandoffPositions[1] = vortexHandoff;
+                    Variable.HandoffRunning = -1;
                 };
             });
         }
@@ -129,6 +169,29 @@ namespace AlchAssV4
         /// </summary>
         public static void StartVortexToLadle()
         {
+            if (Variable.HandoffRunning >= 0) return;
+            Variable.HandoffRunning = 1;
+            if (!Variable.DoVortexCurve || !Variable.DoLines[1])
+            {
+                Variable.HandoffRunning = -1;
+                return;
+            }
+
+            var spiral = Variable.SpiralPhysical;
+            var offset = Variable.Offset;
+            GetEffectAndVortex(out var doEffect, out var doVortex, out var effectPos, out var vortexPos,
+                out var vortexRad);
+            ThreadingHelper.Instance.StartAsyncInvoke(() =>
+            {
+                var effectHandoff = doEffect ? VortexToLadle(spiral, offset, effectPos, Variable.EffectRad) : null;
+                var vortexHandoff = doVortex ? VortexToLadle(spiral, offset, vortexPos, vortexRad) : null;
+                return () =>
+                {
+                    Variable.HandoffPositions[0] = effectHandoff;
+                    Variable.HandoffPositions[1] = vortexHandoff;
+                    Variable.HandoffRunning = -1;
+                };
+            });
         }
 
         /// <summary>
@@ -145,24 +208,183 @@ namespace AlchAssV4
         {
         }
 
-        /// <summary>
-        /// 清除计算结果
-        /// </summary>
-        public static void ClearHandoff()
-        {
-            Variable.HandoffRunning = -1;
-            Variable.HandoffPositions = [null, null];
-        }
-
         #endregion
 
         #region 辅助计算
 
-        public static bool Better((double, int, double) a, (double, int, double) b)
+        /// <summary>
+        /// 螺线 → 加水残差
+        /// </summary>
+        private static double PsiPoint(double th, in Variable.Spiral sp, Variable.Vec2D o, Variable.Vec2D c, double rad)
         {
-            if (Math.Abs(a.Item1 - b.Item1) > 1e-10) return a.Item1 < b.Item1;
-            if (a.Item2 != b.Item2) return a.Item2 < b.Item2;
-            return a.Item3 < b.Item3;
+            var phi = th + sp.Rot;
+            var sinPhi = Math.Sin(phi);
+            var cosPhi = Math.Cos(phi);
+            var dir = new Variable.Vec2D(cosPhi, sinPhi);
+            var tan = new Variable.Vec2D(-sinPhi, cosPhi);
+            var z = c - o;
+            var d = sp.Pos + th * sp.A * dir - o;
+            var dp = sp.A * (dir + th * tan);
+            var q2 = d.SqrMagnitude;
+            var zd = d.Dot(z);
+            var h = zd * zd - (z.SqrMagnitude - rad * rad) * q2;
+            if (h <= 0.0) return double.NaN;
+            var d2 = d.Dot(dp);
+            var zdp = dp.Dot(z);
+            var t = zd * d2 - zdp * q2;
+            return 2.0 * (Math.Sqrt(h) * (d2 * q2 + t) + zd * t);
+        }
+
+        /// <summary>
+        /// 螺线 → 加水区间计算
+        /// </summary>
+        private static Variable.Interval EnclosePhi(Variable.Interval th, in Variable.Spiral sp, Variable.Vec2D o,
+            Variable.Vec2D c, double rad)
+        {
+            var phi = th + Variable.Interval.Point(sp.Rot);
+            var sinPhi = phi.Sin();
+            var cosPhi = phi.Cos();
+            var at = th * sp.A;
+            var dx = Variable.Interval.Point(sp.Pos.X - o.X) + at * cosPhi;
+            var dy = Variable.Interval.Point(sp.Pos.Y - o.Y) + at * sinPhi;
+            var dxp = (cosPhi - th * sinPhi) * sp.A;
+            var dyp = (sinPhi + th * cosPhi) * sp.A;
+            var z = c - o;
+            var k2 = z.SqrMagnitude - rad * rad;
+            var q2 = dx * dx + dy * dy;
+            var zd = dx * z.X + dy * z.Y;
+            var h = zd * zd - q2 * k2;
+            var d2 = dx * dxp + dy * dyp;
+            var zdp = dxp * z.X + dyp * z.Y;
+            var t = zd * d2 - zdp * q2;
+            return 2.0 * (h.Sqrt() * (d2 * q2 + t) + zd * t);
+        }
+
+        /// <summary>
+        /// 螺线 → 加水单个分区求解
+        /// </summary>
+        private static List<double> SolvePartition(double a0, double b0, Variable.Spiral sp, Variable.Vec2D o,
+            Variable.Vec2D c, double rad)
+        {
+            var localRoots = new List<double>();
+            Func<double, double> Psi = t => PsiPoint(t, sp, o, c, rad);
+            Refine(a0, b0);
+            return localRoots;
+
+            void Refine(double a, double b)
+            {
+                var fa = Psi(a);
+                var fb = Psi(b);
+                if (double.IsNaN(fa) || double.IsNaN(fb))
+                {
+                    if (b - a < 1e-10) return;
+                    var m0 = 0.5 * (a + b);
+                    Refine(a, m0);
+                    Refine(m0, b);
+                    return;
+                }
+
+                if (fa == 0.0)
+                {
+                    TryAdd(a);
+                    return;
+                }
+
+                if (fb == 0.0)
+                {
+                    TryAdd(b);
+                    return;
+                }
+
+                if (Math.Sign(fa) != Math.Sign(fb))
+                {
+                    var r = Algebra.Brent(Psi, a, b);
+                    if (double.IsNaN(r))
+                    {
+                        var m1 = 0.5 * (a + b);
+                        Refine(a, m1);
+                        Refine(m1, b);
+                    }
+                    else
+                        TryAdd(r);
+
+                    return;
+                }
+
+                if (b - a < 1e-10)
+                {
+                    var pe = EnclosePhi(new(a, b), sp, o, c, rad);
+                    if (pe is { IsEmpty: false, L: <= 0.0, H: >= 0.0 })
+                        TryAdd(0.5 * (a + b));
+                    return;
+                }
+
+                var psi = EnclosePhi(new(a, b), sp, o, c, rad);
+                if (psi is not { IsEmpty: false, L: <= 0.0, H: >= 0.0 }) return;
+                var m2 = 0.5 * (a + b);
+                Refine(a, m2);
+                Refine(m2, b);
+            }
+
+            void TryAdd(double r)
+            {
+                var rl = r - 1e-10;
+                var rr = r + 1e-10;
+                if (rl < sp.MinAngle || rr > sp.MaxAngle) return;
+                var fl = Psi(rl);
+                var fr = Psi(rr);
+                if (double.IsNaN(fl) || double.IsNaN(fr)) return;
+                if (Math.Sign(fl) == Math.Sign(fr)) return;
+                if (localRoots.Any(ex => Math.Abs(ex - r) < 1e-10)) return;
+                localRoots.Add(r);
+            }
+        }
+
+        /// <summary>
+        /// 比较两个折线候选结果
+        /// </summary>
+        private static (double, int, double) Better((double, int, double) a, (double, int, double) b)
+        {
+            if (Math.Abs(a.Item1 - b.Item1) > 1e-10) return a.Item1 < b.Item1 ? a : b;
+            if (a.Item2 != b.Item2) return a.Item2 < b.Item2 ? a : b;
+            return a.Item3 < b.Item3 ? a : b;
+        }
+
+        /// <summary>
+        /// 比较两个螺线候选结果
+        /// </summary>
+        private static (double, double) Better((double, double) a, (double, double) b)
+        {
+            if (Math.Abs(a.Item1 - b.Item1) > 1e-10) return a.Item1 < b.Item1 ? a : b;
+            return a.Item2 > b.Item2 ? a : b;
+        }
+
+        /// <summary>
+        /// 计算单个螺线点
+        /// </summary>
+        private static (double, double) SpiralPoint(Variable.Spiral S, double ang, Variable.Vec2D O, Variable.Vec2D C,
+            double rad)
+        {
+            var pos = new Variable.Vec2D(S.Pos.X + S.A * ang * Math.Cos(ang + S.Rot),
+                S.Pos.Y + S.A * ang * Math.Sin(ang + S.Rot));
+            Geometry.LineVsCircle(pos, O, C, rad, out var t);
+            return (t.HasValue ? t.Value * (O - pos).Magnitude : double.PositiveInfinity, ang);
+        }
+
+        /// <summary>
+        /// 获取目标效果和漩涡参数
+        /// </summary>
+        private static void GetEffectAndVortex(out bool doEffect, out bool doVortex, out Variable.Vec2D effectPos,
+            out Variable.Vec2D vortexPos, out double vortexRad)
+        {
+            doEffect = Variable.TargetEffect != null;
+            var mapId = Variable.MapId[Managers.RecipeMap.currentMap.potionBase.name];
+            var vortexId = mapId < 2 ? Variable.VortexIndex[mapId] : -1;
+            doVortex = vortexId >= 0;
+            effectPos = doEffect ? Variable.Vec2D.From(Variable.TargetEffect.transform.localPosition) : default;
+            var selVortex = doVortex ? Variable.Vortexs[mapId][vortexId] : default;
+            vortexPos = selVortex.Pos;
+            vortexRad = selVortex.Rad;
         }
 
         #endregion

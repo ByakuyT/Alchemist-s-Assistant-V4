@@ -1,6 +1,6 @@
 ﻿namespace AlchAssV4
 {
-    public class Function
+    public static class Function
     {
     }
 }

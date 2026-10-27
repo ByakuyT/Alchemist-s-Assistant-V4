@@ -1,6 +1,6 @@
 ﻿namespace AlchAssV4
 {
-    public class Main
+    public static class Main
     {
     }
 }
