@@ -25,7 +25,7 @@ public class Main : BaseUnityPlugin
         Variable.WindowPositions[6] = Config.Bind("窗口位置", "活跃漩涡", new Vector3(7.65f, -4.60f, 0f));
         Variable.WindowPositions[7] = Config.Bind("窗口位置", "目标漩涡", new Vector3(10.05f, -4.60f, 0f));
         Variable.WindowPositions[8] = Config.Bind("窗口位置", "研磨信息", new Vector3(5.20f, -6.00f, 0f));
-        Variable.WindowRectConfig = Config.Bind("窗口位置", "控制面板", new Rect(200, 200, 400, 400));
+        Variable.WindowRectConfig = Config.Bind("窗口位置", "控制面板", new Rect(200, 200, 450, 600));
         Variable.ColorLines[0] = Config.Bind("颜色设置", "路径切向线", new Color(0.0f, 0.9f, 0.9f));
         Variable.ColorLines[1] = Config.Bind("颜色设置", "加水方向线", new Color(0.2f, 0.5f, 1.0f));
         Variable.ColorLines[2] = Config.Bind("颜色设置", "效果径向线", new Color(0.0f, 0.8f, 0.4f));
@@ -53,9 +53,11 @@ public class Main : BaseUnityPlugin
         Variable.LineWidth = Config.Bind("其他设置", "渲染线宽", 0.075f);
         Variable.NodeSize = Config.Bind("其他设置", "渲染点大小", 0.15f);
         Variable.WindowScale = Config.Bind("其他设置", "信息窗口缩放", 0.8f);
+        Variable.WindowRect = Variable.WindowRectConfig.Value;
+        Function.LoadData();
+        Rendering.CreateMaterialAndSprites();
         LocalizationManager.OnInitialize.AddListener(Localization.FormatLocalization);
         LocalizationManager.OnLocaleChanged.AddListener(Function.SetDebugWindowTitle);
-        Function.LoadData();
         Harmony.CreateAndPatchAll(typeof(Main));
         Logger.LogInfo("Alchemist's Assistant V4 插件已加载");
     }
@@ -65,6 +67,7 @@ public class Main : BaseUnityPlugin
     /// </summary>
     public void Update()
     {
+        Function.UpdateSelectVortex();
     }
 
     /// <summary>

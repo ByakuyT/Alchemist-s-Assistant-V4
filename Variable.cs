@@ -47,11 +47,49 @@ public static class Variable
 
     public const double EffectRad = 1.53;
     public const double IndicatorRad = 0.74;
+    public const double OccCell = 0.5;
+    public const double BoxSkin = 0.01;
 
     public static readonly string[] WindowTags =
         ["路径信息", "加水信息", "移动信息", "目标效果", "酿造信息", "效果偏离", "活跃漩涡", "目标漩涡", "研磨信息"];
 
+    public static readonly string[] VortexTags = ["Vortex_Water", "Vortex_Oil"];
+
+    public static readonly string[] ZoneTags =
+        ["Strong_Water", "Strong_Oil", "Strong_Wine", "Weak_Wine", "Heal_Wine", "Swamp_Oil"];
+
     public static readonly Dictionary<string, int> MapId = new() { { "Water", 0 }, { "Oil", 1 }, { "Wine", 2 } };
+
+    #endregion
+
+    #region 文件数据
+
+    // 0 - 水; 1 - 油
+    public static readonly List<Vortex>[] Vortices = [[], []];
+
+    // 0 - 水强危险区; 1 - 油强危险区; 2 - 酒强危险区; 3 - 弱危险区; 4 - 治疗区; 5 - 沼泽区
+    public static readonly List<ZoneCircle>[] Circles = [[], [], [], [], [], []];
+
+    // 0 - 水强危险区; 1 - 油强危险区; 2 - 酒强危险区; 3 - 弱危险区; 4 - 治疗区; 5 - 沼泽区
+    public static readonly List<ZoneBox>[] Boxes = [[], [], [], [], [], []];
+
+    // 0 - 水强危险区; 1 - 油强危险区; 2 - 酒强危险区; 3 - 弱危险区; 4 - 治疗区; 5 - 沼泽区
+    public static readonly List<ZoneBvh>[] BVH = [[], [], [], [], [], []];
+
+    // 0 - 水强危险区; 1 - 油强危险区; 2 - 酒强危险区; 3 - 弱危险区; 4 - 治疗区; 5 - 沼泽区
+    public static readonly int[][,] OccSum = new int[6][,];
+    public static readonly Vec2D[] OccOrigin = new Vec2D[6];
+
+    #endregion
+
+    #region 渲染材质
+
+    public static Texture2D WindowTexture;
+    public static Material SolidMaterial;
+    public static Material DashedMaterial;
+    public static Sprite RoundSprite;
+    public static Sprite SquareSprite;
+    public static Rect WindowRect;
 
     #endregion
 
@@ -85,9 +123,6 @@ public static class Variable
 
     public static List<(Vec2D, bool)> PathPhysical = [];
 
-    // 0 - 水; 1 - 油
-    public static List<Vortex>[] Vortexs = [[], []];
-
     // 0 - 路径信息; 1 - 加水信息; 2 - 移动信息; 3 - 目标效果; 4 - 酿造信息
     // 5 - 效果偏离; 6 - 活跃漩涡; 7 - 目标漩涡; 8 - 研磨信息
     public static DebugWindow[] DebugWindows = new DebugWindow[9];
@@ -115,13 +150,42 @@ public static class Variable
     }
 
     /// <summary>
+    /// 圆形区域零件
+    /// </summary>
+    public struct ZoneCircle
+    {
+        public Vec2D Pos;
+        public double Rad;
+    }
+
+    /// <summary>
+    /// 矩形区域零件
+    /// </summary>
+    public struct ZoneBox
+    {
+        public Vec2D Pos;
+        public double XHalf, YHalf, Rot;
+    }
+
+    /// <summary>
+    /// 区域零件 BVH 节点
+    /// </summary>
+    public struct ZoneBvh
+    {
+        public double XMin, YMin, XMax, YMax;
+        public int Left, Right;
+        public List<int> Circles;
+        public List<int> Boxes;
+    }
+
+    /// <summary>
     /// 漩涡螺线
     /// </summary>
     public struct Spiral
     {
         public Vec2D Pos;
         public double Rot, MaxAngle, MinAngle;
-        public double A => 1 / (2 * Math.PI);
+        public static double A => 1 / (2 * Math.PI);
     }
 
     /// <summary>

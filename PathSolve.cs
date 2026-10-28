@@ -126,8 +126,8 @@ public static class PathSolve
             bestP = Better(SpiralPoint(S, S.MaxAngle, O, C, rad), bestP);
         }
 
-        return new(S.Pos.X + S.A * bestP.Item2 * Math.Cos(bestP.Item2 + S.Rot),
-            S.Pos.Y + S.A * bestP.Item2 * Math.Sin(bestP.Item2 + S.Rot));
+        return new(S.Pos.X + Variable.Spiral.A * bestP.Item2 * Math.Cos(bestP.Item2 + S.Rot),
+            S.Pos.Y + Variable.Spiral.A * bestP.Item2 * Math.Sin(bestP.Item2 + S.Rot));
     }
 
     #endregion
@@ -223,8 +223,8 @@ public static class PathSolve
         var dir = new Variable.Vec2D(cosPhi, sinPhi);
         var tan = new Variable.Vec2D(-sinPhi, cosPhi);
         var z = c - o;
-        var d = sp.Pos + th * sp.A * dir - o;
-        var dp = sp.A * (dir + th * tan);
+        var d = sp.Pos + th * Variable.Spiral.A * dir - o;
+        var dp = Variable.Spiral.A * (dir + th * tan);
         var q2 = d.SqrMagnitude;
         var zd = d.Dot(z);
         var h = zd * zd - (z.SqrMagnitude - rad * rad) * q2;
@@ -244,11 +244,11 @@ public static class PathSolve
         var phi = th + Variable.Interval.Point(sp.Rot);
         var sinPhi = phi.Sin();
         var cosPhi = phi.Cos();
-        var at = th * sp.A;
+        var at = th * Variable.Spiral.A;
         var dx = Variable.Interval.Point(sp.Pos.X - o.X) + at * cosPhi;
         var dy = Variable.Interval.Point(sp.Pos.Y - o.Y) + at * sinPhi;
-        var dxp = (cosPhi - th * sinPhi) * sp.A;
-        var dyp = (sinPhi + th * cosPhi) * sp.A;
+        var dxp = (cosPhi - th * sinPhi) * Variable.Spiral.A;
+        var dyp = (sinPhi + th * cosPhi) * Variable.Spiral.A;
         var z = c - o;
         var k2 = z.SqrMagnitude - rad * rad;
         var q2 = dx * dx + dy * dy;
@@ -365,8 +365,8 @@ public static class PathSolve
     private static (double, double) SpiralPoint(Variable.Spiral S, double ang, Variable.Vec2D O, Variable.Vec2D C,
         double rad)
     {
-        var pos = new Variable.Vec2D(S.Pos.X + S.A * ang * Math.Cos(ang + S.Rot),
-            S.Pos.Y + S.A * ang * Math.Sin(ang + S.Rot));
+        var pos = new Variable.Vec2D(S.Pos.X + Variable.Spiral.A * ang * Math.Cos(ang + S.Rot),
+            S.Pos.Y + Variable.Spiral.A * ang * Math.Sin(ang + S.Rot));
         Geometry.LineVsCircle(pos, O, C, rad, out var t);
         return (t.HasValue ? t.Value * (O - pos).Magnitude : double.PositiveInfinity, ang);
     }
@@ -382,7 +382,7 @@ public static class PathSolve
         var vortexId = mapId < 2 ? Variable.VortexIndex[mapId] : -1;
         doVortex = vortexId >= 0;
         effectPos = doEffect ? Variable.Vec2D.From(Variable.TargetEffect.transform.localPosition) : default;
-        var selVortex = doVortex ? Variable.Vortexs[mapId][vortexId] : default;
+        var selVortex = doVortex ? Variable.Vortices[mapId][vortexId] : default;
         vortexPos = selVortex.Pos;
         vortexRad = selVortex.Rad;
     }
