@@ -46,10 +46,7 @@ public static class Localization
         var data = Traverse.Create(typeof(LocalizationManager)).Field("localizationData").GetValue<LocalizationData>();
         foreach (var loc in locs)
         foreach (var locale in Enum.GetValues(typeof(LocalizationManager.Locale)))
-            if (loc.values.ContainsKey($"{locale}"))
-                data.Add((int)locale, loc.key, loc.values[$"{locale}"]);
-            else
-                data.Add((int)locale, loc.key, loc.key);
+            data.Add((int)locale, loc.key, loc.values.ContainsKey($"{locale}") ? loc.values[$"{locale}"] : loc.key);
     }
 
     #endregion

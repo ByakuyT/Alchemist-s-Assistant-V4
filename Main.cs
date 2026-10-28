@@ -55,6 +55,7 @@ public class Main : BaseUnityPlugin
         Variable.WindowScale = Config.Bind("其他设置", "信息窗口缩放", 0.8f);
         LocalizationManager.OnInitialize.AddListener(Localization.FormatLocalization);
         LocalizationManager.OnLocaleChanged.AddListener(Function.SetDebugWindowTitle);
+        Function.LoadData();
         Harmony.CreateAndPatchAll(typeof(Main));
         Logger.LogInfo("Alchemist's Assistant V4 插件已加载");
     }
