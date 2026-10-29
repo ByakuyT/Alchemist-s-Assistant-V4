@@ -12,7 +12,7 @@ public static class Variable
 {
     #region 配置数据
 
-    public static ConfigEntry<KeyboardShortcut> KeyWindow;
+    public static ConfigEntry<KeyboardShortcut> KeyMenu;
     public static ConfigEntry<KeyboardShortcut> KeyEffect;
     public static ConfigEntry<KeyboardShortcut> KeyVortex;
     public static ConfigEntry<KeyboardShortcut> KeyCustomLine;
@@ -39,7 +39,7 @@ public static class Variable
     // 0 - 路径信息; 1 - 加水信息; 2 - 移动信息; 3 - 目标效果; 4 - 酿造信息
     // 5 - 效果偏离; 6 - 活跃漩涡; 7 - 目标漩涡; 8 - 研磨信息
     public static ConfigEntry<Vector3>[] WindowPositions = new ConfigEntry<Vector3>[9];
-    public static ConfigEntry<Rect> WindowRectConfig;
+    public static ConfigEntry<Rect> MenuRectConfig;
 
     #endregion
 
@@ -89,29 +89,42 @@ public static class Variable
     public static Material DashedMaterial;
     public static Sprite RoundSprite;
     public static Sprite SquareSprite;
-    public static Rect WindowRect;
+    public static Rect MenuRect;
+    public static float CustomLineLabelWidth;
+    public static float CustomMarkerLabelWidth;
+    public static GUIStyle LabelStyle;
 
     #endregion
 
     #region 功能开关
 
+    public static bool ShowMenu = false;
+    public static bool IsResizing = false;
     public static bool DoPathCurve = false;
-
     public static bool DoVortexCurve = false;
-
+    public static bool DoCustomLine = false;
+    public static bool DoCustomMarker = false;
     // 0 - 路径切向线; 1 - 加水方向线; 2 - 效果径向线; 3 - 漩涡径向线; 4 - 漩涡切向线
     public static bool[] DoLines = [false, false, false, false, false];
+    public static bool DisplayPolar = false;
 
     #endregion
 
     #region 状态数据
 
     public static int HandoffRunning = -1;
+    public static Vector2 LastMousePos;
     public static Vec2D Offset;
     public static Spiral? SpiralPhysical;
-
     public static PotionEffectMapItem TargetEffect;
-
+    public static int TargetLineIndex;
+    public static int TargetMarkerIndex;
+    public static List<double> CustomLineDirections = [];
+    public static List<bool> CustomLineHovers = [];
+    public static List<(string, bool)> CustomLineInputs = [];
+    public static List<Vec2D> CustomMarkerPositions = [];
+    public static List<bool> CustomMarkerHovers = [];
+    public static List<(string, string, bool, bool)> CustomMarkerInputs = [];
     // 0 - 水; 1 - 油
     public static int[] VortexIndex = [-1, -1];
 
@@ -185,7 +198,7 @@ public static class Variable
     {
         public Vec2D Pos;
         public double Rot, MaxAngle, MinAngle;
-        public static double A => 1 / (2 * Math.PI);
+        public static double A => 1.0 / (2.0 * Math.PI);
     }
 
     /// <summary>
@@ -198,10 +211,18 @@ public static class Variable
         public static Vec2D From(Vector2 v) => new(v.x, v.y);
         public Vector3 ToVec3() => new((float)X, (float)Y, 0f);
         public Vector2 ToVec2() => new((float)X, (float)Y);
+        public static readonly Vec2D Zero = new(0.0, 0.0);
+        public static readonly Vec2D One = new(1.0, 1.0);
+        public static readonly Vec2D Up = new(0.0, 1.0);
+        public static readonly Vec2D Down = new(0.0, -1.0);
+        public static readonly Vec2D Right = new(1.0, 0.0);
+        public static readonly Vec2D Left = new(-1.0, 0.0);
         public double SqrMagnitude => X * X + Y * Y;
         public double Magnitude => Math.Sqrt(SqrMagnitude);
         public double Dot(Vec2D v) => X * v.X + Y * v.Y;
         public double Cross(Vec2D v) => X * v.Y - Y * v.X;
+        public double Distance(Vec2D v) => (this - v).Magnitude;
+        public double SignedAngle(Vec2D v) => Math.Atan2(Cross(v), Dot(v)) * (180.0 / Math.PI);
         public static Vec2D operator +(Vec2D a, Vec2D b) => new(a.X + b.X, a.Y + b.Y);
         public static Vec2D operator -(Vec2D a, Vec2D b) => new(a.X - b.X, a.Y - b.Y);
         public static Vec2D operator *(Vec2D v, double k) => new(v.X * k, v.Y * k);

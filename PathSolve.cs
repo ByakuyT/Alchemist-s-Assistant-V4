@@ -26,7 +26,7 @@ public static class PathSolve
             {
                 var B = path[i].Item1;
                 Geometry.LineVsCircle(B, O, C, rad, out var ti);
-                var cur = (ti.HasValue ? ti.Value * (O - B).Magnitude : double.PositiveInfinity, i, 0.0);
+                var cur = (ti.HasValue ? ti.Value * O.Distance(B) : double.PositiveInfinity, i, 0.0);
                 local = Better(cur, local);
                 if (i == path.Count - 1 || path[i + 1].Item2) return local;
                 var D = path[i + 1].Item1 - B;
@@ -368,7 +368,7 @@ public static class PathSolve
         var pos = new Variable.Vec2D(S.Pos.X + Variable.Spiral.A * ang * Math.Cos(ang + S.Rot),
             S.Pos.Y + Variable.Spiral.A * ang * Math.Sin(ang + S.Rot));
         Geometry.LineVsCircle(pos, O, C, rad, out var t);
-        return (t.HasValue ? t.Value * (O - pos).Magnitude : double.PositiveInfinity, ang);
+        return (t.HasValue ? t.Value * O.Distance(pos) : double.PositiveInfinity, ang);
     }
 
     /// <summary>

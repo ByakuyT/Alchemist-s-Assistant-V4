@@ -7,8 +7,8 @@
     <ProjectGuid>{F76900F7-C7A2-4C30-A22A-8F2DB19D29D4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AlchAssV3</RootNamespace>
-    <AssemblyName>AlchAssV3</AssemblyName>
+    <RootNamespace>AlchAssV4</RootNamespace>
+    <AssemblyName>AlchAssV4</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <LangVersion>latest</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

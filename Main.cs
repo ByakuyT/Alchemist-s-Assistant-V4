@@ -25,7 +25,7 @@ public class Main : BaseUnityPlugin
         Variable.WindowPositions[6] = Config.Bind("窗口位置", "活跃漩涡", new Vector3(7.65f, -4.60f, 0f));
         Variable.WindowPositions[7] = Config.Bind("窗口位置", "目标漩涡", new Vector3(10.05f, -4.60f, 0f));
         Variable.WindowPositions[8] = Config.Bind("窗口位置", "研磨信息", new Vector3(5.20f, -6.00f, 0f));
-        Variable.WindowRectConfig = Config.Bind("窗口位置", "控制面板", new Rect(200, 200, 450, 600));
+        Variable.MenuRectConfig = Config.Bind("窗口位置", "控制面板", new Rect(200, 200, 450, 600));
         Variable.ColorLines[0] = Config.Bind("颜色设置", "路径切向线", new Color(0.0f, 0.9f, 0.9f));
         Variable.ColorLines[1] = Config.Bind("颜色设置", "加水方向线", new Color(0.2f, 0.5f, 1.0f));
         Variable.ColorLines[2] = Config.Bind("颜色设置", "效果径向线", new Color(0.0f, 0.8f, 0.4f));
@@ -43,7 +43,7 @@ public class Main : BaseUnityPlugin
         Variable.ColorCustomLineHover = Config.Bind("颜色设置", "自定义方向线选中", new Color(1.0f, 1.0f, 0.0f));
         Variable.ColorCustomMarkerNormal = Config.Bind("颜色设置", "自定义标记点静态", new Color(0.1f, 0.1f, 0.1f));
         Variable.ColorCustomMarkerHover = Config.Bind("颜色设置", "自定义标记点选中", new Color(1.0f, 0.3f, 0.3f));
-        Variable.KeyWindow = Config.Bind("快捷键", "开关控制面板", new KeyboardShortcut(KeyCode.F1));
+        Variable.KeyMenu = Config.Bind("快捷键", "开关控制面板", new KeyboardShortcut(KeyCode.F1));
         Variable.KeyEffect = Config.Bind("快捷键", "选择目标效果", new KeyboardShortcut(KeyCode.LeftControl));
         Variable.KeyVortex = Config.Bind("快捷键", "选择目标漩涡", new KeyboardShortcut(KeyCode.LeftAlt));
         Variable.KeyCustomLine =
@@ -53,7 +53,7 @@ public class Main : BaseUnityPlugin
         Variable.LineWidth = Config.Bind("其他设置", "渲染线宽", 0.075f);
         Variable.NodeSize = Config.Bind("其他设置", "渲染点大小", 0.15f);
         Variable.WindowScale = Config.Bind("其他设置", "信息窗口缩放", 0.8f);
-        Variable.WindowRect = Variable.WindowRectConfig.Value;
+        Variable.MenuRect = Variable.MenuRectConfig.Value;
         Function.LoadData();
         Rendering.CreateMaterialAndSprites();
         LocalizationManager.OnInitialize.AddListener(Localization.FormatLocalization);
@@ -67,7 +67,10 @@ public class Main : BaseUnityPlugin
     /// </summary>
     public void Update()
     {
+        Function.UpdateMenu();
         Function.UpdateSelectVortex();
+        Function.UpdateCustomLines();
+        Function.UpdateCustomMarkers();
     }
 
     /// <summary>

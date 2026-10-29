@@ -133,6 +133,23 @@ public static class Algebra
     }
 
     /// <summary>
+    /// 转换为极坐标
+    /// </summary>
+    public static Variable.Vec2D ToPolar(Variable.Vec2D v)
+    {
+        return new(v.Magnitude, Variable.Vec2D.Right.SignedAngle(v));
+    }
+
+    /// <summary>
+    /// 转换为直角坐标
+    /// </summary>
+    public static Variable.Vec2D FromPolar(Variable.Vec2D v)
+    {
+        var theta = v.Y / 180 * Math.PI;
+        return new(v.X * Math.Cos(theta), v.X * Math.Sin(theta));
+    }
+
+    /// <summary>
     /// Math.BitIncrement(double)
     /// </summary>
     public static double Up(double x)
@@ -164,6 +181,14 @@ public static class Algebra
         if (bits == 0L) return -double.Epsilon;
         bits += (bits < 0) ? 1 : -1;
         return BitConverter.Int64BitsToDouble(bits);
+    }
+
+    /// <summary>
+    /// Math.Clamp(double)
+    /// </summary>
+    public static double Clamp(double value, double min, double max)
+    {
+        return value < min ? min : value > max ? max : value;
     }
 
     #endregion

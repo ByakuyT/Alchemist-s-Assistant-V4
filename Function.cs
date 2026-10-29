@@ -1,13 +1,209 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using PotionCraft.LocalizationSystem;
+using PotionCraft.ManagersSystem;
+using PotionCraft.ObjectBased.InteractiveItem;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace AlchAssV4;
 
 public static class Function
 {
     #region 快捷键功能
+
+    /// <summary>
+    /// 更新控制面板
+    /// </summary>
+    public static void UpdateMenu()
+    {
+        if (Variable.KeyMenu.Value.IsDown())
+            Variable.ShowMenu = !Variable.ShowMenu;
+        if (Variable.ShowMenu)
+        {
+            Cursor.visible = true;
+            UIWindow.ResizeMenu();
+        }
+    }
+
+    /// <summary>
+    /// 更新选择效果
+    /// </summary>
+    public static void UpdateSelectEffect(InteractiveItem item)
+    {
+        if (Variable.KeyEffect.Value.IsPressed() && Mouse.current.rightButton.wasPressedThisFrame)
+            Variable.TargetEffect =
+                Managers.RecipeMap.currentMap.referencesContainer.potionEffectsOnMap.FirstOrDefault(x =>
+                    x.name == item.name);
+    }
+
+    /// <summary>
+    /// 更新选择漩涡
+    /// </summary>
+    public static void UpdateSelectVortex()
+    {
+        if (Managers.RecipeMap?.currentMap == null) return;
+        var mapname = Managers.RecipeMap.currentMap.potionBase.name;
+        if (mapname == "Wine") return;
+        var mapid = Variable.MapId[mapname];
+        if (Variable.KeyVortex.Value.IsPressed() && Mouse.current.rightButton.wasPressedThisFrame)
+        {
+            var mousePos = Managers.Cursor.cursor.transform.position;
+            if (!Managers.RecipeMap.recipeMapObject.visibilityZoneCollider.OverlapPoint(mousePos)) return;
+            var worldPos = Managers.RecipeMap.recipeMapObject.transmitterWindow.ViewToCamera(mousePos);
+            var mapPos =
+                Variable.Vec2D.From(
+                    Managers.RecipeMap.currentMap.referencesContainer.transform.InverseTransformPoint(worldPos));
+            Variable.VortexIndex[mapid] = -1;
+            for (var i = 0; i < Variable.Vortices[mapid].Count; i++)
+            {
+                var vortex = Variable.Vortices[mapid][i];
+                if ((mapPos - vortex.Pos).SqrMagnitude <= vortex.Rad * vortex.Rad)
+                {
+                    Variable.VortexIndex[mapid] = i;
+                    break;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 更新自定义方向线
+    /// </summary>
+    public static void UpdateCustomLines()
+    {
+        if (Variable.KeyCustomLine.Value.IsPressed() && Variable.DoCustomLine)
+        {
+            var mousePos = Managers.Cursor.cursor.transform.position;
+            if (!Managers.RecipeMap.recipeMapObject.visibilityZoneCollider.OverlapPoint(mousePos))
+            {
+                Variable.TargetLineIndex = -1;
+                return;
+            }
+
+            var worldPos = Managers.RecipeMap.recipeMapObject.transmitterWindow.ViewToCamera(mousePos);
+            var mapPos =
+                Variable.Vec2D.From(
+                    Managers.RecipeMap.currentMap.referencesContainer.transform.InverseTransformPoint(worldPos));
+            var delta = mapPos - Variable.Offset -
+                        Variable.Vec2D.From(Managers.RecipeMap.recipeMapObject.indicatorContainer.localPosition);
+            var dir = Variable.Vec2D.Right.SignedAngle(delta);
+            if (Mouse.current.middleButton.isPressed)
+            {
+                if (Variable.TargetLineIndex < 0) return;
+                Variable.CustomLineDirections[Variable.TargetLineIndex] = dir;
+                Variable.CustomLineInputs[Variable.TargetLineIndex] = ($"{dir}", false);
+            }
+            else
+            {
+                var target = -1;
+                var minDis = double.PositiveInfinity;
+                for (var i = 0; i < Variable.CustomLineDirections.Count; i++)
+                {
+                    var theta = Variable.CustomLineDirections[i] / 180 * Math.PI;
+                    var dis = Math.Abs(delta.X * Math.Sin(theta) - delta.Y * Math.Cos(theta));
+                    if (dis < minDis)
+                    {
+                        minDis = dis;
+                        target = i;
+                    }
+                }
+
+                Variable.TargetLineIndex = minDis < 0.3 ? target : -1;
+                if (Mouse.current.rightButton.wasPressedThisFrame)
+                {
+                    if (Variable.TargetLineIndex < 0)
+                    {
+                        Variable.CustomLineDirections.Add(dir);
+                        Variable.CustomLineHovers.Add(false);
+                        Variable.CustomLineInputs.Add(($"{dir}", false));
+                        Variable.TargetLineIndex = Variable.CustomLineDirections.Count - 1;
+                    }
+                    else
+                    {
+                        Variable.CustomLineDirections.RemoveAt(Variable.TargetLineIndex);
+                        Variable.CustomLineHovers.RemoveAt(Variable.TargetLineIndex);
+                        Variable.CustomLineInputs.RemoveAt(Variable.TargetLineIndex);
+                        Variable.TargetLineIndex = -1;
+                    }
+
+                    Localization.UpdateCustomLineLabelWidth();
+                }
+            }
+        }
+        else
+            Variable.TargetLineIndex = -1;
+    }
+
+    /// <summary>
+    /// 更新自定义标记点
+    /// </summary>
+    public static void UpdateCustomMarkers()
+    {
+        if (Variable.KeyCustomMarker.Value.IsPressed() && Variable.DoCustomMarker)
+        {
+            var mousePos = Managers.Cursor.cursor.transform.position;
+            if (!Managers.RecipeMap.recipeMapObject.visibilityZoneCollider.OverlapPoint(mousePos))
+            {
+                Variable.TargetMarkerIndex = -1;
+                return;
+            }
+
+            var worldPos = Managers.RecipeMap.recipeMapObject.transmitterWindow.ViewToCamera(mousePos);
+            var mapPosV = Managers.RecipeMap.currentMap.referencesContainer.transform.InverseTransformPoint(worldPos);
+            var mapPos = new Variable.Vec2D(Algebra.Clamp(mapPosV.x, -80, 80), Algebra.Clamp(mapPosV.y, -80, 80));
+            var storagePos = Variable.DisplayPolar ? Algebra.ToPolar(mapPos) : mapPos;
+            if (Mouse.current.middleButton.isPressed)
+            {
+                if (Variable.TargetMarkerIndex < 0) return;
+                Variable.CustomMarkerPositions[Variable.TargetMarkerIndex] = storagePos;
+                Variable.CustomMarkerInputs[Variable.TargetMarkerIndex] =
+                    ($"{storagePos.X}", $"{storagePos.Y}", false, false);
+            }
+            else
+            {
+                var target = -1;
+                var minDis = double.PositiveInfinity;
+                for (var i = 0; i < Variable.CustomMarkerPositions.Count; i++)
+                {
+                    var dis = mapPos.Distance(Variable.DisplayPolar
+                        ? Algebra.FromPolar(Variable.CustomMarkerPositions[i])
+                        : Variable.CustomMarkerPositions[i]);
+                    if (dis < minDis)
+                    {
+                        minDis = dis;
+                        target = i;
+                    }
+                }
+
+                Variable.TargetMarkerIndex = minDis < 0.3 ? target : -1;
+                if (Mouse.current.rightButton.wasPressedThisFrame)
+                {
+                    if (Variable.TargetMarkerIndex < 0)
+                    {
+                        Variable.CustomMarkerPositions.Add(storagePos);
+                        Variable.CustomMarkerHovers.Add(false);
+                        Variable.CustomMarkerInputs.Add(($"{storagePos.X}", $"{storagePos.Y}", false, false));
+                        Variable.TargetMarkerIndex = Variable.CustomMarkerPositions.Count - 1;
+                    }
+                    else
+                    {
+                        Variable.CustomMarkerPositions.RemoveAt(Variable.TargetMarkerIndex);
+                        Variable.CustomMarkerHovers.RemoveAt(Variable.TargetMarkerIndex);
+                        Variable.CustomMarkerInputs.RemoveAt(Variable.TargetMarkerIndex);
+                        Variable.TargetMarkerIndex = -1;
+                    }
+
+                    Localization.UpdateCustomMarkerLabelWidth();
+                }
+            }
+        }
+        else
+            Variable.TargetMarkerIndex = -1;
+    }
 
     #endregion
 
