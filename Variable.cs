@@ -104,6 +104,7 @@ public static class Variable
     public static GUIStyle LabelStyle;
     public static GUIStyle AxisStyle;
     public static GUIStyle SliderStyle;
+    public static SpriteRenderer BaseLadleRenderer;
 
     #endregion
 

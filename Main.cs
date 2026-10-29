@@ -1,7 +1,15 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
+using PotionCraft.DebugObjects.DebugWindows;
 using PotionCraft.LocalizationSystem;
+using PotionCraft.ManagersSystem.Cursor;
+using PotionCraft.ObjectBased;
+using PotionCraft.ObjectBased.InteractiveItem;
+using PotionCraft.ObjectBased.Mortar;
+using PotionCraft.ObjectBased.RecipeMap.RecipeMapItem.IndicatorMapItem;
+using PotionCraft.ObjectBased.RecipeMap.RecipeMapItem.SolventDirectionHint;
+using PotionCraft.ObjectBased.UIElements;
 using UnityEngine;
 
 namespace AlchAssV4;
@@ -82,6 +90,114 @@ public class Main : BaseUnityPlugin
         if (Variable.MenuStyle == null) UIWindow.InitStyles();
         Variable.MenuRect = GUILayout.Window(0, Variable.MenuRect, UIWindow.DrawMenu,
             LocalizationManager.GetText("功能面板"), Variable.MenuStyle);
+    }
+
+    #endregion
+
+    #region Patch - 游戏更新
+
+    /// <summary>
+    /// 计算研磨信息
+    /// </summary>
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(Mortar), "Update")]
+    public static void MortarUpdate(Mortar __instance)
+    {
+        Variable.DebugWindows[8]?.ShowText(Calculation.CalculateGrind(__instance));
+    }
+
+    /// <summary>
+    /// 计算其他窗口信息和渲染元素
+    /// </summary>
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(IndicatorMapItem), "UpdateByCollection")]
+    public static void IndicatorUpdate(float ___health)
+    {
+        Calculation.UpdateOffset();
+        Calculation.InitPathCurve();
+        Calculation.InitVortexCurve();
+        Calculation.InitPoints(___health);
+        Calculation.GetPathLineDirection();
+        Calculation.GetLadleLineDirection();
+        Calculation.GetTargetLineDirection();
+        Calculation.GetVortexLineDirection();
+        Calculation.GetTangentLineDirection();
+        Rendering.SetNodeRenderers();
+        Rendering.SetLineRenderers();
+        Rendering.SetCurveRenderers();
+        Rendering.SetRangeRenderers();
+        Rendering.SetCustomLineRenderers();
+        Rendering.SetCustomMarkerRenderers();
+        Rendering.SetIndicatorRenderers();
+        Variable.DebugWindows[0]?.ShowText(Calculation.CalculatePath());
+        Variable.DebugWindows[1]?.ShowText(Calculation.CalculateLadle());
+        Variable.DebugWindows[2]?.ShowText(Calculation.CalculateMove());
+        Variable.DebugWindows[3]?.ShowText(Calculation.CalculateEffect());
+        Variable.DebugWindows[4]?.ShowText(Calculation.CalculateBrewing(___health));
+        Variable.DebugWindows[5]?.ShowText(Calculation.CalculateDeviation());
+        Variable.DebugWindows[6]?.ShowText(Calculation.CalculateVortex());
+        Variable.DebugWindows[7]?.ShowText(Calculation.CalculateTargetVortex());
+    }
+
+    #endregion
+
+    #region Patch - 信息获取
+
+    /// <summary>
+    /// 生成调试窗口
+    /// </summary>
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(Room), "Awake")]
+    public static void InitDebugWindows(Room __instance)
+    {
+        if (__instance.roomIndex == RoomIndex.Laboratory)
+            for (var i = 0; i < Variable.DebugWindows.Length; i++)
+                Function.InitDebugWindow(i, __instance);
+    }
+
+    /// <summary>
+    /// 获取右键点击的目标效果
+    /// </summary>
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(CursorManager), "UpdateDebugWindow")]
+    public static void UpdateSelectEffect(InteractiveItem ___hoveredInteractiveItem)
+    {
+        if (___hoveredInteractiveItem != null)
+            Function.UpdateSelectEffect(___hoveredInteractiveItem);
+    }
+
+    /// <summary>
+    /// 获取基础加水渲染器
+    /// </summary>
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(SolventDirectionHint), "Awake")]
+    public static void GetBaseRenderer(SpriteRenderer ___spriteRenderer)
+    {
+        Variable.BaseLadleRenderer = ___spriteRenderer;
+    }
+
+    #endregion
+
+    #region Patch - 窗口辅助
+
+    /// <summary>
+    /// 不知道为什么要这么做，但不这样窗口会有问题
+    /// </summary>
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(MovableUIItem), "FixOutOfBoundsCase")]
+    public static bool WindowFixOutOfBoundsCase(MovableUIItem __instance)
+    {
+        return __instance is not DebugWindow;
+    }
+
+    /// <summary>
+    /// 同样不知道为什么要这么做，但不这样窗口也会有问题
+    /// </summary>
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(Window), "ToForeground")]
+    public static bool WindowForeground(Window __instance)
+    {
+        return __instance is not DebugWindow;
     }
 
     #endregion
