@@ -49,6 +49,7 @@ public static class Variable
     public const double IndicatorRad = 0.74;
     public const double OccCell = 0.5;
     public const double BoxSkin = 0.01;
+    public const double DangerStrongDamage = 0.4;
     public static readonly Font Font = Font.CreateDynamicFontFromOSFont("Microsoft YaHei", 16);
 
     public static readonly string[] WindowTags =
@@ -184,7 +185,16 @@ public static class Variable
     // 0 - 路径和效果; 1 - 路径和漩涡; 2 - 加水和效果; 3 - 加水和漩涡
     public static List<Vec2D>[] IntersectionPositions = [[], [], [], []];
 
+    // 0 - 路径和效果; 1 - 路径和漩涡; 2 - 加水和效果; 3 - 加水和漩涡
+    public static Vec2D?[] ClosestPositions = [null, null, null, null];
+
     public static List<(Vec2D, bool)> PathPhysical = [];
+
+    // 0 - 路径切向线; 1 - 加水方向线; 2 - 效果径向线; 3 - 漩涡径向线; 4 - 漩涡切向线
+    public static double?[] LineDirections = [null, null, null, null, null];
+
+    //0 - 路径; 1 - 加水; 2 - 漩涡
+    public static double?[] DangerDistance = [null, null, null];
 
     // 0 - 路径信息; 1 - 加水信息; 2 - 移动信息; 3 - 目标效果; 4 - 酿造信息
     // 5 - 效果偏离; 6 - 活跃漩涡; 7 - 目标漩涡; 8 - 研磨信息

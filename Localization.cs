@@ -16,6 +16,28 @@ public static class Localization
     #region 格式化文本
 
     /// <summary>
+    /// 格式化月盐文本
+    /// </summary>
+    public static string FormatMoonSalt(double rotation)
+    {
+        var angle = Algebra.DeltaAngle(rotation, 0.0);
+        return !Variable.DisplaySalt ? $"{(float)angle}'" :
+            angle < 0.0 ? $"<sprite=\"IconsAtlas\" name=\"MoonSalt\"> {(float)(-angle / 9 * 25)}" :
+            $"<sprite=\"IconsAtlas\" name=\"SunSalt\"> {(float)(angle / 9f * 25f)}";
+    }
+
+    /// <summary>
+    /// 格式化血盐文本
+    /// </summary>
+    public static string FormatLifeSalt(double dangerDistance)
+    {
+        var hp = Variable.DangerStrongDamage * dangerDistance * 100.0 - 100.0;
+        return !Variable.DisplaySalt
+            ? $"{(float)hp}%"
+            : $"<sprite=\"IconsAtlas\" name=\"LifeSalt\"> {(float)(hp * 2.5)}";
+    }
+
+    /// <summary>
     /// 格式化本地化文本
     /// </summary>
     public static void FormatLocalization()

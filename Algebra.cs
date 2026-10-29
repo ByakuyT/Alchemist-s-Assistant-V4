@@ -200,5 +200,14 @@ public static class Algebra
         return value < min ? min : value > max ? max : value;
     }
 
+    /// <summary>
+    /// Math.DeltaAngle(double)
+    /// </summary>
+    public static double DeltaAngle(double current, double target)
+    {
+        var delta = (target - current) % 360.0;
+        return delta > 180.0 ? delta - 360.0 : delta <= -180.0 ? delta + 360.0 : delta;
+    }
+
     #endregion
 }
