@@ -78,6 +78,10 @@ public class Main : BaseUnityPlugin
     /// </summary>
     public void OnGui()
     {
+        if (!Variable.ShowMenu) return;
+        if (Variable.MenuStyle == null) UIWindow.InitStyles();
+        Variable.MenuRect = GUILayout.Window(0, Variable.MenuRect, UIWindow.DrawMenu,
+            LocalizationManager.GetText("功能面板"), Variable.MenuStyle);
     }
 
     #endregion

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace AlchAssV4;
 
@@ -135,18 +136,26 @@ public static class Algebra
     /// <summary>
     /// 转换为极坐标
     /// </summary>
-    public static Variable.Vec2D ToPolar(Variable.Vec2D v)
+    public static Vector2 ToPolar(Vector2 v)
     {
-        return new(v.Magnitude, Variable.Vec2D.Right.SignedAngle(v));
+        return new(v.magnitude, Vector2.SignedAngle(Vector2.right, v));
     }
 
     /// <summary>
     /// 转换为直角坐标
     /// </summary>
-    public static Variable.Vec2D FromPolar(Variable.Vec2D v)
+    public static Vector2 FromPolar(Vector2 v)
     {
-        var theta = v.Y / 180 * Math.PI;
-        return new(v.X * Math.Cos(theta), v.X * Math.Sin(theta));
+        var theta = v.y / 180 * Mathf.PI;
+        return new(v.x * Mathf.Cos(theta), v.x * Mathf.Sin(theta));
+    }
+
+    /// <summary>
+    /// 判断浮点数是否为有限值
+    /// </summary>
+    public static bool IsFinite(double value)
+    {
+        return !double.IsNaN(value) && !double.IsInfinity(value);
     }
 
     /// <summary>

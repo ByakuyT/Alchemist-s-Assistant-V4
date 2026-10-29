@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using PotionCraft.DebugObjects.DebugWindows;
 using PotionCraft.LocalizationSystem;
 using PotionCraft.ManagersSystem;
+using PotionCraft.ObjectBased;
 using PotionCraft.ObjectBased.InteractiveItem;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -90,7 +92,7 @@ public static class Function
                     Managers.RecipeMap.currentMap.referencesContainer.transform.InverseTransformPoint(worldPos));
             var delta = mapPos - Variable.Offset -
                         Variable.Vec2D.From(Managers.RecipeMap.recipeMapObject.indicatorContainer.localPosition);
-            var dir = Variable.Vec2D.Right.SignedAngle(delta);
+            var dir = (float)Variable.Vec2D.Right.SignedAngle(delta);
             if (Mouse.current.middleButton.isPressed)
             {
                 if (Variable.TargetLineIndex < 0) return;
@@ -154,14 +156,14 @@ public static class Function
 
             var worldPos = Managers.RecipeMap.recipeMapObject.transmitterWindow.ViewToCamera(mousePos);
             var mapPosV = Managers.RecipeMap.currentMap.referencesContainer.transform.InverseTransformPoint(worldPos);
-            var mapPos = new Variable.Vec2D(Algebra.Clamp(mapPosV.x, -80, 80), Algebra.Clamp(mapPosV.y, -80, 80));
+            var mapPos = new Vector2(Mathf.Clamp(mapPosV.x, -80, 80), Mathf.Clamp(mapPosV.y, -80, 80));
             var storagePos = Variable.DisplayPolar ? Algebra.ToPolar(mapPos) : mapPos;
             if (Mouse.current.middleButton.isPressed)
             {
                 if (Variable.TargetMarkerIndex < 0) return;
                 Variable.CustomMarkerPositions[Variable.TargetMarkerIndex] = storagePos;
                 Variable.CustomMarkerInputs[Variable.TargetMarkerIndex] =
-                    ($"{storagePos.X}", $"{storagePos.Y}", false, false);
+                    ($"{storagePos.x}", $"{storagePos.y}", false, false);
             }
             else
             {
@@ -169,9 +171,10 @@ public static class Function
                 var minDis = double.PositiveInfinity;
                 for (var i = 0; i < Variable.CustomMarkerPositions.Count; i++)
                 {
-                    var dis = mapPos.Distance(Variable.DisplayPolar
-                        ? Algebra.FromPolar(Variable.CustomMarkerPositions[i])
-                        : Variable.CustomMarkerPositions[i]);
+                    var dis = Vector2.Distance(mapPos,
+                        Variable.DisplayPolar
+                            ? Algebra.FromPolar(Variable.CustomMarkerPositions[i])
+                            : Variable.CustomMarkerPositions[i]);
                     if (dis < minDis)
                     {
                         minDis = dis;
@@ -186,7 +189,7 @@ public static class Function
                     {
                         Variable.CustomMarkerPositions.Add(storagePos);
                         Variable.CustomMarkerHovers.Add(false);
-                        Variable.CustomMarkerInputs.Add(($"{storagePos.X}", $"{storagePos.Y}", false, false));
+                        Variable.CustomMarkerInputs.Add(($"{storagePos.x}", $"{storagePos.y}", false, false));
                         Variable.TargetMarkerIndex = Variable.CustomMarkerPositions.Count - 1;
                     }
                     else
@@ -205,9 +208,64 @@ public static class Function
             Variable.TargetMarkerIndex = -1;
     }
 
+    /// <summary>
+    /// 更新自定义标记点存储格式
+    /// </summary>
+    public static void UpdateCustomMarkerPositionType()
+    {
+        for (var i = 0; i < Variable.CustomMarkerPositions.Count; i++)
+        {
+            Variable.CustomMarkerPositions[i] = Variable.DisplayPolar
+                ? Algebra.ToPolar(Variable.CustomMarkerPositions[i])
+                : Algebra.FromPolar(Variable.CustomMarkerPositions[i]);
+            Variable.CustomMarkerInputs[i] = ($"{Variable.CustomMarkerPositions[i].x}",
+                $"{Variable.CustomMarkerPositions[i].y}", false, false);
+        }
+    }
+
+    /// <summary>
+    /// 更新渲染元素开关
+    /// </summary>
+    public static void UpdateDoFromEnable()
+    {
+        Variable.DoCustomLine = Variable.EnableCustomLine;
+        Variable.DoCustomMarker = Variable.EnableCustomMarker;
+        Variable.DoPathCurve = Variable.EnablePathCurve;
+        Variable.DoVortexCurve = Variable.EnableVortexCurve;
+        Variable.DoEffectRange = Variable.EnableEffectRange;
+        Variable.DoVortexRange = Variable.EnableVortexRange;
+        Variable.DoTransparency = Variable.EnableTransparency;
+        Variable.DoPathEffectPoint = Variable.EnablePathCurve && Variable.EnableEffectRange;
+        Variable.DoLadleEffectPoint = Variable.EnableLadleLine && Variable.EnableEffectRange;
+        Variable.DoPathVortexPoint = Variable.EnablePathCurve && Variable.EnableVortexRange;
+        Variable.DoLadleVortexPoint = Variable.EnableLadleLine && Variable.EnableVortexRange;
+        Variable.DoPathDangerPoint = Variable.EnablePathCurve && Variable.EnableDangerSimulation;
+        Variable.DoLadleDangerPoint = Variable.EnableLadleLine && Variable.EnableDangerSimulation;
+        Variable.DoVortexDangerPoint = Variable.EnableVortexCurve && Variable.EnableDangerSimulation;
+        Variable.DoSwampPoint = Variable.EnablePathCurve && Variable.EnableSwampSimulation;
+        Variable.DoLines[0] = Variable.EnablePathLine && Variable.EnablePathCurve;
+        Variable.DoLines[1] = Variable.EnableLadleLine;
+        Variable.DoLines[2] = Variable.EnableEffectLine;
+        Variable.DoLines[3] = Variable.EnableVortexLine;
+        Variable.DoLines[4] = Variable.EnableTangentLine && Variable.EnableVortexCurve;
+    }
+
     #endregion
 
     #region 调试窗口
+
+    /// <summary>
+    /// 生成调试窗口
+    /// </summary>
+    public static void InitDebugWindow(int index, Room room)
+    {
+        var window = DebugWindow.Init(LocalizationManager.GetText(Variable.WindowTags[index]), true);
+        window.ToForeground();
+        window.transform.SetParent(room.transform, false);
+        window.transform.localPosition = Variable.WindowPositions[index].Value;
+        window.transform.localScale *= Variable.WindowScale.Value;
+        Variable.DebugWindows[index] = window;
+    }
 
     /// <summary>
     /// 设置调试窗口标题
@@ -216,6 +274,30 @@ public static class Function
     {
         for (var i = 0; i < Variable.DebugWindows.Length; i++)
             Variable.DebugWindows[i]?.captionText.text = LocalizationManager.GetText(Variable.WindowTags[i]);
+    }
+
+    /// <summary>
+    /// 保存调试窗口位置
+    /// </summary>
+    public static void SaveDebugWindowPos()
+    {
+        for (var i = 0; i < Variable.DebugWindows.Length; i++)
+            Variable.WindowPositions[i].Value = Variable.DebugWindows[i].transform.localPosition;
+        Variable.MenuRectConfig.Value = Variable.MenuRect;
+    }
+
+    /// <summary>
+    /// 恢复调试窗口
+    /// </summary>
+    public static void RestoreDebugWindows()
+    {
+        for (var i = 0; i < Variable.DebugWindows.Length; i++)
+        {
+            Variable.DebugWindows[i].Visible = true;
+            Variable.DebugWindows[i].transform.localPosition = Variable.WindowPositions[i].Value;
+        }
+
+        Variable.MenuRect = Variable.MenuRectConfig.Value;
     }
 
     #endregion

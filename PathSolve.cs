@@ -140,7 +140,7 @@ public static class PathSolve
     public static void StartPathToLadle()
     {
         if (Variable.HandoffRunning >= 0) return;
-        Variable.HandoffRunning = 0;
+        Variable.HandoffRunning = 1;
         if (!Variable.DoPathCurve || !Variable.DoLines[1])
         {
             Variable.HandoffRunning = -1;
@@ -170,7 +170,7 @@ public static class PathSolve
     public static void StartVortexToLadle()
     {
         if (Variable.HandoffRunning >= 0) return;
-        Variable.HandoffRunning = 1;
+        Variable.HandoffRunning = 3;
         if (!Variable.DoVortexCurve || !Variable.DoLines[1])
         {
             Variable.HandoffRunning = -1;

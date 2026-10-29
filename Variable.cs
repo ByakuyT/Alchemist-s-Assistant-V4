@@ -49,6 +49,7 @@ public static class Variable
     public const double IndicatorRad = 0.74;
     public const double OccCell = 0.5;
     public const double BoxSkin = 0.01;
+    public static readonly Font Font = Font.CreateDynamicFontFromOSFont("Microsoft YaHei", 16);
 
     public static readonly string[] WindowTags =
         ["路径信息", "加水信息", "移动信息", "目标效果", "酿造信息", "效果偏离", "活跃漩涡", "目标漩涡", "研磨信息"];
@@ -84,34 +85,80 @@ public static class Variable
 
     #region 渲染材质
 
-    public static Texture2D WindowTexture;
+    public static Texture2D MenuTexture;
     public static Material SolidMaterial;
     public static Material DashedMaterial;
     public static Sprite RoundSprite;
     public static Sprite SquareSprite;
     public static Rect MenuRect;
+    public static Vector2 ScrollPosition;
     public static float CustomLineLabelWidth;
     public static float CustomMarkerLabelWidth;
+    public static GUIStyle MenuStyle;
+    public static GUIStyle CategoryStyle;
+    public static GUIStyle ToggleStyle;
+    public static GUIStyle ButtonStyle;
+    public static GUIStyle DeleteButtonStyle;
+    public static GUIStyle TextFieldStyle;
+    public static GUIStyle TextFieldErrorStyle;
     public static GUIStyle LabelStyle;
+    public static GUIStyle AxisStyle;
+    public static GUIStyle SliderStyle;
 
     #endregion
 
     #region 功能开关
 
     public static bool ShowMenu = false;
-    public static bool IsResizing = false;
+    public static bool EnableExpand = true;
+    public static bool DisplayExpand = true;
+    public static bool ActionExpand = true;
+    public static bool HandoffExpand = true;
+    public static bool CustomLineListExpand = true;
+    public static bool CustomMarkerListExpand = true;
+    public static bool EnablePathLine = false;
+    public static bool EnableLadleLine = false;
+    public static bool EnableEffectLine = false;
+    public static bool EnableVortexLine = false;
+    public static bool EnableTangentLine = false;
+    public static bool EnableCustomLine = false;
+    public static bool EnableCustomMarker = false;
+    public static bool EnablePathCurve = false;
+    public static bool EnableVortexCurve = false;
+    public static bool EnableEffectRange = false;
+    public static bool EnableVortexRange = false;
+    public static bool EnableDangerSimulation = false;
+    public static bool EnableSwampSimulation = false;
+    public static bool EnableTransparency = false;
     public static bool DoPathCurve = false;
     public static bool DoVortexCurve = false;
     public static bool DoCustomLine = false;
     public static bool DoCustomMarker = false;
+    public static bool DoEffectRange = false;
+    public static bool DoVortexRange = false;
+    public static bool DoTransparency = false;
+    public static bool DoPathEffectPoint = false;
+    public static bool DoLadleEffectPoint = false;
+    public static bool DoPathVortexPoint = false;
+    public static bool DoLadleVortexPoint = false;
+    public static bool DoPathDangerPoint = false;
+    public static bool DoLadleDangerPoint = false;
+    public static bool DoVortexDangerPoint = false;
+
+    public static bool DoSwampPoint = false;
+
     // 0 - 路径切向线; 1 - 加水方向线; 2 - 效果径向线; 3 - 漩涡径向线; 4 - 漩涡切向线
     public static bool[] DoLines = [false, false, false, false, false];
+    public static bool DisplaySalt = false;
+    public static bool DisplayStage = false;
+    public static bool DisplayOffset = false;
     public static bool DisplayPolar = false;
 
     #endregion
 
     #region 状态数据
 
+    public static bool IsResizing = false;
     public static int HandoffRunning = -1;
     public static Vector2 LastMousePos;
     public static Vec2D Offset;
@@ -119,12 +166,14 @@ public static class Variable
     public static PotionEffectMapItem TargetEffect;
     public static int TargetLineIndex;
     public static int TargetMarkerIndex;
-    public static List<double> CustomLineDirections = [];
+    public static List<float> CustomLineDirections = [];
     public static List<bool> CustomLineHovers = [];
     public static List<(string, bool)> CustomLineInputs = [];
-    public static List<Vec2D> CustomMarkerPositions = [];
+    public static List<Vector2> CustomMarkerPositions = [];
     public static List<bool> CustomMarkerHovers = [];
+
     public static List<(string, string, bool, bool)> CustomMarkerInputs = [];
+
     // 0 - 水; 1 - 油
     public static int[] VortexIndex = [-1, -1];
 
