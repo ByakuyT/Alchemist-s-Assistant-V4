@@ -105,7 +105,34 @@ public static class Variable
     public static GUIStyle LabelStyle;
     public static GUIStyle AxisStyle;
     public static GUIStyle SliderStyle;
+    public static LineRenderer VortexRange;
+    public static LineRenderer IndicatorRange;
+    public static LineRenderer IndicatorDirection;
+    public static LineRenderer EffectRangeOuter;
+    public static LineRenderer EffectRangeMiddle;
+    public static LineRenderer VortexCurve;
+    public static LineRenderer[] Lines = new LineRenderer[5];
+    public static List<LineRenderer> PathCurves = [];
+    public static List<LineRenderer> CustomLines = [];
+    public static List<(LineRenderer, LineRenderer)> CustomMarkers = [];
+    public static SpriteRenderer EffectDiskMiddle;
+    public static SpriteRenderer EffectDiskInner;
+
     public static SpriteRenderer BaseLadleRenderer;
+
+    // 0 - 路径和效果; 1 - 路径和漩涡; 2 - 加水和效果; 3 - 加水和漩涡
+    public static SpriteRenderer[] ClosestPoints = new SpriteRenderer[4];
+
+    // 0 - 路径和效果; 1 - 路径和漩涡; 2 - 加水和效果; 3 - 加水和漩涡
+    public static List<SpriteRenderer>[] IntersectionPoints = [[], [], [], []];
+
+    // 0 - 路径; 1 - 加水; 2 - 漩涡
+    public static List<SpriteRenderer>[] DangerPoints = [[], [], []];
+
+    // 0 - 路径; 1 - 加水; 2 - 漩涡
+    public static SpriteRenderer[] DefeatPoints = new SpriteRenderer[3];
+    public static List<SpriteRenderer> SwampPoints = [];
+    public static SpriteRenderer[] HandoffPoints = new SpriteRenderer[2];
 
     #endregion
 
@@ -179,16 +206,26 @@ public static class Variable
     // 0 - 水; 1 - 油
     public static int[] VortexIndex = [-1, -1];
 
-    // 0 - 效果； 1 - 漩涡
+    // 0 - 效果; 1 - 漩涡
     public static Vec2D?[] HandoffPositions = [null, null];
+
+    // 0 - 路径; 1 - 加水; 2 - 漩涡
+    public static Vec2D?[] DefeatPositions = [null, null, null];
 
     // 0 - 路径和效果; 1 - 路径和漩涡; 2 - 加水和效果; 3 - 加水和漩涡
     public static List<Vec2D>[] IntersectionPositions = [[], [], [], []];
 
+    // 0 - 路径; 1 - 加水; 2 - 漩涡
+    public static List<Vec2D>[] DangerPositions = [[], [], []];
+
+    public static List<Vec2D> SwampPositions = [];
+
     // 0 - 路径和效果; 1 - 路径和漩涡; 2 - 加水和效果; 3 - 加水和漩涡
     public static Vec2D?[] ClosestPositions = [null, null, null, null];
-
     public static List<(Vec2D, bool)> PathPhysical = [];
+    public static List<(Vector3[], bool)> PathGraphical = [];
+
+    public static Vector3[] VortexGraphical;
 
     // 0 - 路径切向线; 1 - 加水方向线; 2 - 效果径向线; 3 - 漩涡径向线; 4 - 漩涡切向线
     public static double?[] LineDirections = [null, null, null, null, null];

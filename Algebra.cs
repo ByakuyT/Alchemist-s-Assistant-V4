@@ -171,7 +171,7 @@ public static class Algebra
         }
 
         if (bits == long.MinValue) return double.Epsilon;
-        bits += (bits < 0) ? -1 : 1;
+        bits += bits < 0 ? -1 : 1;
         return BitConverter.Int64BitsToDouble(bits);
     }
 
@@ -188,7 +188,7 @@ public static class Algebra
         }
 
         if (bits == 0L) return -double.Epsilon;
-        bits += (bits < 0) ? 1 : -1;
+        bits += bits < 0 ? 1 : -1;
         return BitConverter.Int64BitsToDouble(bits);
     }
 

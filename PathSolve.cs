@@ -109,7 +109,7 @@ public static class PathSolve
             for (var i = 0; i < n; i++)
             {
                 var a = S.MinAngle + i * span;
-                var b = (i == n - 1) ? S.MaxAngle : S.MinAngle + (i + 1) * span;
+                var b = i == n - 1 ? S.MaxAngle : S.MinAngle + (i + 1) * span;
                 partitions[i] = (a, b);
             }
 
@@ -119,7 +119,7 @@ public static class PathSolve
             var rootl = locals.SelectMany(l => l).OrderBy(x => x).ToList();
             var roots = new List<double>();
             foreach (var r in rootl)
-                if (roots.Count == 0 || Math.Abs(roots[roots.Count - 1] - r) > 1e-10)
+                if (roots.Count == 0 || Math.Abs(roots.Last() - r) > 1e-10)
                     roots.Add(r);
             foreach (var r in roots)
                 bestP = Better(SpiralPoint(S, r, O, C, rad), bestP);
